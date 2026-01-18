@@ -1,0 +1,216 @@
+/* Terminal-themed Portfolio */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #0a0a0a;
+    color: #00ff00;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.terminal {
+    background-color: #000000;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+/* ASCII Art Header */
+.ascii-art {
+    color: #00ff00;
+    text-align: center;
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.tagline {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #00cc00;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/* Command Line */
+.command-line {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.prompt {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.command {
+    color: #ffff00;
+    margin-left: 5px;
+}
+
+.cursor {
+    color: #00ff00;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+/* Output */
+.output {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.output p {
+    margin: 5px 0;
+}
+
+/* Links */
+.output a {
+    color: #00ccff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.output a:hover {
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    text-decoration: underline;
+}
+
+/* Projects */
+.project {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #0a0a0a;
+    border-left: 3px solid #00ff00;
+    margin-bottom: 15px;
+}
+
+.project h3 {
+    color: #00ff00;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.project-description {
+    color: #cccccc;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.project-link {
+    color: #00ccff !important;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.project-link:hover {
+    color: #00ffff !important;
+}
+
+/* Tags */
+.tags {
+    margin: 15px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background-color: #003300;
+    color: #00ff00;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid #00ff00;
+}
+
+/* Footer */
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #006600;
+    font-size: 0.9rem;
+    padding-top: 20px;
+    border-top: 1px solid #003300;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .terminal {
+        padding: 20px;
+    }
+
+    .ascii-art {
+        font-size: 0.5rem;
+    }
+
+    .tagline {
+        font-size: 1rem;
+    }
+
+    body {
+        padding: 10px;
+    }
+
+    .tags {
+        gap: 5px;
+    }
+
+    .tag {
+        font-size: 0.75rem;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ascii-art {
+        font-size: 0.4rem;
+    }
+
+    .output {
+        margin-left: 10px;
+    }
+
+    .project {
+        padding: 10px;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+    background-color: #00ff00;
+    color: #000000;
+}
+
+::-moz-selection {
+    background-color: #00ff00;
+    color: #000000;
+}
