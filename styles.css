@@ -1,9 +1,10 @@
 /* ================================================================
-   Vamsi - Security Engineer Terminal Portfolio
-   Theme: Ubuntu Terminal + Security Engineering Aesthetic
+   Ziad Hassan - SRE Terminal Portfolio
+   Theme: Ubuntu Terminal + Cloud Native Hybrid
+   Enhanced with Frontend Design Skill Guidelines
    ================================================================ */
 
-/* CSS Variables - Ubuntu Terminal Colors */
+/* CSS Variables - Ubuntu Terminal Colors + Enhanced Palette */
 :root {
     /* Core Ubuntu Colors */
     --bg-primary: #300a24;
@@ -106,13 +107,14 @@ body::before {
         opacity: 0;
         transform: translateY(30px) scale(0.98);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
 }
 
-/* Terminal Header */
+/* Terminal Header - More Refined */
 .terminal-header {
     background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
     padding: 14px 18px;
@@ -122,6 +124,7 @@ body::before {
     border-bottom: 1px solid #1a1a1a;
     position: relative;
     justify-content: flex-start;
+    /* Buttons on left */
 }
 
 .terminal-header::after {
@@ -138,6 +141,7 @@ body::before {
     display: flex;
     gap: 8px;
     z-index: 2;
+    /* Ensure clickable above title */
     position: relative;
 }
 
@@ -173,6 +177,7 @@ body::before {
     color: var(--text-secondary);
     font-size: 0.85rem;
     position: absolute;
+    /* Absolute center */
     left: 0;
     right: 0;
     text-align: center;
@@ -186,10 +191,11 @@ body::before {
     padding: 24px;
     position: relative;
     overflow: hidden;
-    background: radial-gradient(ellipse at 50% 0%, rgba(38, 162, 105, 0.03) 0%, transparent 60%);
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(38, 162, 105, 0.03) 0%, transparent 60%);
 }
 
-/* CRT Scanlines Effect */
+/* CRT Scanlines Effect - More Visible */
 .scanlines {
     position: absolute;
     top: 0;
@@ -197,20 +203,25 @@ body::before {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.08) 0px,
-        rgba(0, 0, 0, 0.08) 1px,
-        transparent 1px,
-        transparent 3px
-    );
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.08) 0px,
+            rgba(0, 0, 0, 0.08) 1px,
+            transparent 1px,
+            transparent 3px);
     z-index: 10;
     animation: scanlineFlicker 8s linear infinite;
 }
 
 @keyframes scanlineFlicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.95; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.95;
+    }
 }
 
 /* Phosphor Glow Effect */
@@ -225,18 +236,21 @@ body::before {
     pointer-events: none;
 }
 
-/* ASCII Banner with Border Box */
+/* ASCII Banner - CSS Box (no more character counting!) */
 .ascii-banner {
     margin: 0 auto 28px auto;
     padding: 20px 24px;
     width: fit-content;
     max-width: 100%;
     text-align: center;
+
+    /* The box is now CSS */
     border: 2px solid var(--green-bright);
     border-radius: 4px;
     box-shadow:
         0 0 15px rgba(38, 162, 105, 0.3),
         inset 0 0 20px rgba(38, 162, 105, 0.05);
+
     animation: bannerGlow 3s ease-in-out infinite alternate;
     overflow-x: auto;
 }
@@ -269,6 +283,7 @@ body::before {
             inset 0 0 15px rgba(38, 162, 105, 0.03);
         border-color: var(--green-bright);
     }
+
     to {
         box-shadow:
             0 0 25px rgba(74, 244, 151, 0.5),
@@ -285,24 +300,43 @@ body::before {
     animation: commandReveal 0.6s var(--ease-out-expo) forwards;
 }
 
-.command-block:nth-child(2) { animation-delay: 0.1s; }
-.command-block:nth-child(3) { animation-delay: 0.25s; }
-.command-block:nth-child(4) { animation-delay: 0.4s; }
-.command-block:nth-child(5) { animation-delay: 0.55s; }
-.command-block:nth-child(6) { animation-delay: 0.7s; }
+.command-block:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.command-block:nth-child(3) {
+    animation-delay: 0.25s;
+}
+
+.command-block:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.command-block:nth-child(5) {
+    animation-delay: 0.55s;
+}
+
+.command-block:nth-child(6) {
+    animation-delay: 0.7s;
+}
+
+.command-block:nth-child(7) {
+    animation-delay: 0.85s;
+}
 
 @keyframes commandReveal {
     from {
         opacity: 0;
         transform: translateX(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
     }
 }
 
-/* Prompt Styling */
+/* Prompt Styling - Enhanced Glow */
 .prompt {
     margin-bottom: 10px;
     display: flex;
@@ -332,6 +366,23 @@ body::before {
     position: relative;
 }
 
+/* Typing Animation for Commands */
+.cmd.typing {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typeCommand 1.5s steps(40, end) forwards;
+}
+
+@keyframes typeCommand {
+    from {
+        max-width: 0;
+    }
+
+    to {
+        max-width: 100%;
+    }
+}
+
 /* Output Styling */
 .output {
     padding-left: 0;
@@ -340,7 +391,136 @@ body::before {
     position: relative;
 }
 
-/* Links Output */
+/* Systemd Output */
+.systemd-output {
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 8px 0;
+}
+
+.status-active {
+    color: var(--green-glow);
+    font-size: 1.3em;
+    text-shadow: 0 0 10px var(--green-bright);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.enabled {
+    color: var(--green-bright);
+}
+
+.active {
+    color: var(--green-light);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(51, 209, 122, 0.5);
+}
+
+.uptime {
+    color: var(--cyan-bright);
+    font-weight: 700;
+}
+
+/* Kubectl Table - Enhanced */
+.kubectl-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+.kubectl-table th {
+    color: var(--cyan);
+    text-align: left;
+    padding: 8px 16px 8px 0;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(42, 161, 179, 0.3);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.kubectl-table td {
+    padding: 10px 16px 10px 0;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 0.2s;
+}
+
+.kubectl-table tr {
+    transition: all 0.2s;
+}
+
+.kubectl-table tr:hover td {
+    background: rgba(42, 161, 179, 0.05);
+    padding-left: 8px;
+}
+
+.status-ready {
+    color: var(--green-glow);
+    font-weight: 700;
+    text-shadow: 0 0 6px rgba(51, 209, 122, 0.4);
+}
+
+/* Log Output */
+.log-output {
+    font-size: 0.85rem;
+}
+
+.log-entry {
+    padding: 8px 0;
+    border-left: 3px solid transparent;
+    padding-left: 12px;
+    margin-left: -12px;
+    transition: all 0.25s var(--ease-out-expo);
+    border-radius: 0 4px 4px 0;
+}
+
+.log-entry:hover {
+    border-left-color: var(--cyan-bright);
+    background: rgba(42, 161, 179, 0.08);
+    transform: translateX(4px);
+}
+
+.log-date {
+    color: var(--text-secondary);
+    min-width: 85px;
+    display: inline-block;
+    font-size: 0.8rem;
+}
+
+.log-level {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-right: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.log-level.info {
+    background: linear-gradient(135deg, var(--green-bright), #1f8a58);
+    color: #000;
+    box-shadow: 0 2px 8px rgba(38, 162, 105, 0.3);
+}
+
+/* ============================================
+   PERSONAL SITE STYLES
+   ============================================ */
+
+/* Quick Links Row */
 .links-output {
     padding: 8px 0;
     font-size: 0.9rem;
@@ -383,7 +563,6 @@ body::before {
     color: var(--text-secondary);
     font-size: 0.85rem;
     line-height: 1.5;
-    margin-top: 8px;
     margin-left: 0;
 }
 
@@ -418,7 +597,7 @@ body::before {
     font-style: italic;
 }
 
-/* About Output */
+/* About Output - Single Line Keywords */
 .about-output {
     padding: 8px 0;
 }
@@ -429,7 +608,7 @@ body::before {
     letter-spacing: 0.5px;
 }
 
-/* Tag Badges */
+/* Tag Badges (Recruiter Scanning) */
 .tag {
     display: inline-flex;
     align-items: center;
@@ -449,9 +628,10 @@ body::before {
     margin-left: 12px;
 }
 
-/* Links - Interactive */
+/* Links - More Interactive */
 .link {
     color: var(--cyan);
+    /* Slightly darker base for better hover contrast */
     text-decoration: none;
     position: relative;
     transition: all 0.25s var(--ease-out-expo);
@@ -478,23 +658,38 @@ body::before {
     width: 100%;
 }
 
-/* Blinking Cursor */
+/* Blinking Cursor - Enhanced */
 .cursor {
     color: var(--green-glow);
     text-shadow: 0 0 10px var(--green-bright);
     animation: cursorBlink 1s step-end infinite, cursorGlow 2s ease-in-out infinite;
     display: inline-block;
     width: 10px;
+    /* Fixed width to prevent layout shift */
 }
 
 @keyframes cursorBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 @keyframes cursorGlow {
-    0%, 100% { text-shadow: 0 0 10px var(--green-bright); }
-    50% { text-shadow: 0 0 20px var(--green-glow), 0 0 30px var(--green-bright); }
+
+    0%,
+    100% {
+        text-shadow: 0 0 10px var(--green-bright);
+    }
+
+    50% {
+        text-shadow: 0 0 20px var(--green-glow), 0 0 30px var(--green-bright);
+    }
 }
 
 /* Final Prompt */
@@ -518,10 +713,11 @@ body::before {
     opacity: 1;
 }
 
-/* Responsive Design */
+/* Responsive Design Fixes */
 @media (max-width: 768px) {
     body {
         padding: 0.5rem;
+        /* Reduced padding for mobile */
     }
 
     .terminal {
@@ -534,34 +730,56 @@ body::before {
     .terminal-body {
         padding: 12px;
         overflow-x: hidden;
+        /* Prevent body scroll */
     }
 
-    .ascii-banner {
+    /* Scrollable Containers */
+    .ascii-banner,
+    .kubectl-table,
+    .json-output,
+    .log-output {
         overflow-x: auto;
         max-width: 100%;
         -webkit-overflow-scrolling: touch;
         padding-bottom: 8px;
+        /* Space for scrollbar */
     }
 
-    .ascii-banner pre {
+    .ascii-banner {
         font-size: 0.35rem;
+        /* Smaller font on mobile */
+    }
+
+    .kubectl-table table {
+        min-width: 600px;
+        /* Ensure table doesn't squash */
     }
 
     .output {
         font-size: 0.85rem;
         word-break: break-word;
+        /* Wrap long text */
     }
 
-    .tag {
-        font-size: 0.6rem;
-        padding: 2px 6px;
-        margin-left: 4px;
+    /* Adjust log entries for mobile */
+    .log-date {
+        display: inline-block;
+        margin-right: 8px;
+        font-size: 0.7rem;
+        opacity: 0.8;
+    }
+
+    .log-entry {
+        padding-left: 8px;
+        margin-left: 0;
+        border-left-width: 2px;
     }
 }
 
 @media (max-width: 480px) {
-    .ascii-banner pre {
-        font-size: 0.3rem;
+    .ascii-banner {
+        display: none;
+        /* Hide banner on very small screens */
     }
 
     .terminal-header {
@@ -574,8 +792,14 @@ body::before {
 
     .command-block {
         animation: none;
+        /* Disable complex animations for performance */
         opacity: 1;
         margin-bottom: 16px;
+    }
+
+    .log-level {
+        display: inline-block;
+        margin-bottom: 2px;
     }
 }
 
@@ -605,9 +829,27 @@ body::before {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Focus States */
+/* Focus States for Accessibility */
 .link:focus {
     outline: none;
     box-shadow: 0 0 0 2px var(--cyan-glow);
     border-radius: 2px;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    .terminal {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .scanlines,
+    body::before {
+        display: none;
+    }
 }
