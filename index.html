@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Vamsi - Security Engineer | Product/Application Security | AI/ML Security | DevSecOps">
-    <title>Vamsi - Security Engineer</title>
+    <meta name="keywords" content="Security, DevSecOps, AppSec, AI/ML Security, Threat Modeling">
+    <meta name="author" content="Vamsi">
+    <title>vamsi@security:~$</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <div class="container">
-        <div class="terminal">
-            <!-- ASCII Art Header -->
-            <pre class="ascii-art">
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="btn close"></span>
+                <span class="btn minimize"></span>
+                <span class="btn maximize"></span>
+            </div>
+            <span class="terminal-title">vamsi@security:~</span>
+        </div>
+        <div class="terminal-body">
+            <div class="scanlines"></div>
+
+            <!-- ASCII Banner -->
+            <div class="ascii-banner">
+                <pre>
  ██▒   █▓ ▄▄▄       ███▄ ▄███▓  ██████  ██▓
 ▓██░   █▒▒████▄    ▓██▒▀█▀ ██▒▒██    ▒ ▓██▒
  ▓██  █▒░▒██  ▀█▄  ▓██    ▓██░░ ▓██▄   ▒██▒
@@ -22,87 +40,78 @@
      ░░    ░   ▒   ░      ░   ░  ░  ░   ▒ ░
       ░        ░  ░       ░         ░   ░
      ░
-            </pre>
-
-            <div class="tagline">Security Engineering</div>
-
-            <!-- Prompt Section -->
-            <div class="command-line">
-                <span class="prompt">vamsi@security:~$</span> <span class="command">whoami</span>
-            </div>
-            <div class="output">
-                <p>Vamsi - Security Engineer</p>
-                <p>📍 Germany</p>
+</pre>
+                <span class="banner-subtitle">Security Engineering</span>
             </div>
 
-            <!-- About Section -->
-            <div class="command-line">
-                <span class="prompt">vamsi@security:~$</span> <span class="command">cat about.txt</span>
-            </div>
-            <div class="output">
-                <p>🔐 Product/Application Security Engineer</p>
-                <p>🤖 AI/ML Security</p>
-                <p>🛠️ DevSecOps</p>
-                <p>🔎 Threat Modeling</p>
-            </div>
-
-            <!-- Links Section -->
-            <div class="command-line">
-                <span class="prompt">vamsi@security:~$</span> <span class="command">ls -l links/</span>
-            </div>
-            <div class="output">
-                <p>→ <a href="https://github.com/thedevappsecguy" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-                <p>→ <a href="https://www.linkedin.com/in/vamsi-krishna-bonam/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
-                <p>→ <a href="https://www.credly.com/users/vamsikrishnabonam/" target="_blank" rel="noopener noreferrer">Credly</a></p>
-            </div>
-
-            <!-- Projects Section -->
-            <div class="command-line">
-                <span class="prompt">vamsi@security:~$</span> <span class="command">cat projects/README.md</span>
-            </div>
-            <div class="output">
-                <div class="project">
-                    <h3>→ safe-packages</h3>
-                    <p class="project-description">
-                        A CLI tool to scan dependencies for vulnerabilities and flags potentially
-                        compromised dependencies (supply chain security).
-                    </p>
-                    <p class="tags">
-                        <span class="tag">python</span>
-                        <span class="tag">cli</span>
-                        <span class="tag">security</span>
-                        <span class="tag">dependencies</span>
-                        <span class="tag">osv</span>
-                        <span class="tag">security-automation</span>
-                        <span class="tag">security-tools</span>
-                        <span class="tag">supply-chain-security</span>
-                        <span class="tag">security-scan</span>
-                    </p>
-                    <p>
-                        <a href="https://github.com/thedevappsecguy/safe-packages" target="_blank" rel="noopener noreferrer" class="project-link">
-                            View on GitHub →
-                        </a>
-                    </p>
+            <!-- Links -->
+            <div class="command-block">
+                <div class="prompt">
+                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
+                    <span class="cmd">cat ~/links.txt</span>
+                </div>
+                <div class="output links-output">
+                    <a href="https://github.com/thedevappsecguy" target="_blank" rel="noopener noreferrer" class="link">GitHub</a> ·
+                    <a href="https://www.linkedin.com/in/vamsi-krishna-bonam/" target="_blank" rel="noopener noreferrer" class="link">LinkedIn</a> ·
+                    <a href="https://www.credly.com/users/vamsikrishnabonam/" target="_blank" rel="noopener noreferrer" class="link">Credly</a>
                 </div>
             </div>
 
-            <!-- Notes Section -->
-            <div class="command-line">
-                <span class="prompt">vamsi@security:~$</span> <span class="command">cat notes/status.txt</span>
-            </div>
-            <div class="output">
-                <p>📝 Posts coming soon...</p>
+            <!-- Projects -->
+            <div class="command-block">
+                <div class="prompt">
+                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
+                    <span class="cmd">ls -la ~/projects/</span>
+                </div>
+                <div class="output projects-output">
+                    <div class="project-item">
+                        <a href="https://github.com/thedevappsecguy/safe-packages" target="_blank" rel="noopener noreferrer" class="link project-name">safe-packages</a>
+                        <span class="tag">python</span>
+                        <span class="tag">cli</span>
+                        <span class="tag">security</span>
+                        <span class="tag">osv</span>
+                        <span class="tag">supply-chain-security</span>
+                        <span class="project-desc">A CLI tool to scan dependencies for vulnerabilities and flags potentially compromised dependencies (supply chain security).</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Footer -->
-            <div class="command-line">
-                <span class="prompt">vamsi@security:~$</span> <span class="cursor">█</span>
+            <!-- Notes -->
+            <div class="command-block">
+                <div class="prompt">
+                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
+                    <span class="cmd">ls ~/notes/</span>
+                </div>
+                <div class="output notes-output">
+                    <div class="note-item coming-soon">
+                        <span class="note-name">...</span>
+                        <span class="note-desc">posts coming soon</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="footer">
-                <p>© 2026 Vamsi</p>
+            <!-- About -->
+            <div class="command-block">
+                <div class="prompt">
+                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
+                    <span class="cmd">cat ~/about.txt</span>
+                </div>
+                <div class="output about-output">
+                    <span class="about-keywords">Germany · Product/Application Security Engineer · AI/ML Security · DevSecOps · Threat Modeling</span>
+                </div>
+            </div>
+
+            <!-- Blinking cursor -->
+            <div class="prompt final-prompt">
+                <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
+                <span class="cursor">▌</span>
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <span>© 2026 Vamsi</span>
+    </footer>
 </body>
+
 </html>
