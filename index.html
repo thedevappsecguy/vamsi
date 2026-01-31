@@ -1,111 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="description" content="Vamsi - Security Engineer | Product/Application Security | AI/ML Security | DevSecOps">
     <meta name="keywords" content="Security, DevSecOps, AppSec, AI/ML Security, Threat Modeling">
     <meta name="author" content="Vamsi">
     <title>vamsi@security:~$</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="terminal">
-        <div class="terminal-header">
-            <div class="terminal-buttons">
-                <span class="btn close"></span>
-                <span class="btn minimize"></span>
-                <span class="btn maximize"></span>
+    <!-- Navigation -->
+    <div class="nav-wrapper">
+        <header class="nav-bar">
+            <div class="nav-brand">
+                <span class="material-symbols-outlined nav-icon">shield_lock</span>
+                <h2 class="nav-logo">VAMSI</h2>
             </div>
-            <span class="terminal-title">vamsi@security:~</span>
-        </div>
-        <div class="terminal-body">
-            <div class="scanlines"></div>
-
-            <!-- ASCII Banner -->
-            <div class="ascii-banner">
-                <pre>
- _    __                      _
-| |  / /___ _____ ___  _____(_)
-| | / / __ `/ __ `__ \/ ___/ /
-| |/ / /_/ / / / / / (__  ) /
-|___/\__,_/_/ /_/ /_/____/_/
-</pre>
-                <span class="banner-subtitle">Security Engineering</span>
-            </div>
-
-            <!-- Links -->
-            <div class="command-block">
-                <div class="prompt">
-                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
-                    <span class="cmd">cat ~/links.txt</span>
-                </div>
-                <div class="output links-output">
-                    <a href="https://github.com/thedevappsecguy" target="_blank" rel="noopener noreferrer" class="link">GitHub</a> ·
-                    <a href="https://www.linkedin.com/in/vamsi-krishna-bonam/" target="_blank" rel="noopener noreferrer" class="link">LinkedIn</a> ·
-                    <a href="https://www.credly.com/users/vamsikrishnabonam/" target="_blank" rel="noopener noreferrer" class="link">Credly</a>
-                </div>
-            </div>
-
-            <!-- Projects -->
-            <div class="command-block">
-                <div class="prompt">
-                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
-                    <span class="cmd">ls -la ~/projects/</span>
-                </div>
-                <div class="output projects-output">
-                    <div class="project-item">
-                        <a href="https://github.com/thedevappsecguy/safe-packages" target="_blank" rel="noopener noreferrer" class="link project-name">safe-packages</a>
-                        <span class="tag">python</span>
-                        <span class="tag">cli</span>
-                        <span class="tag">security</span>
-                        <span class="tag">osv</span>
-                        <span class="tag">supply-chain-security</span>
-                        <span class="project-desc">A CLI tool to scan dependencies for vulnerabilities and flags potentially compromised dependencies (supply chain security).</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notes -->
-            <div class="command-block">
-                <div class="prompt">
-                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
-                    <span class="cmd">ls ~/notes/</span>
-                </div>
-                <div class="output notes-output">
-                    <div class="note-item coming-soon">
-                        <span class="note-name">...</span>
-                        <span class="note-desc">posts coming soon</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- About -->
-            <div class="command-block">
-                <div class="prompt">
-                    <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
-                    <span class="cmd">cat ~/about.txt</span>
-                </div>
-                <div class="output about-output">
-                    <span class="about-keywords">Germany · Product/Application Security Engineer · AI/ML Security · DevSecOps · Threat Modeling</span>
-                </div>
-            </div>
-
-            <!-- Blinking cursor -->
-            <div class="prompt final-prompt">
-                <span class="user">vamsi</span>@<span class="host">security</span>:<span class="path">~</span>$
-                <span class="cursor">▌</span>
-            </div>
-        </div>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="#notes">Notes</a>
+                <a href="#links">Links</a>
+            </nav>
+        </header>
     </div>
 
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-grid-bg"></div>
+            <div class="hero-content">
+                <div class="status-badge">STATUS: ACTIVE_OPERATOR</div>
+                <h1 class="hero-name">VAMSI</h1>
+                <h2 class="hero-subtitle">Security Engineer</h2>
+                <div class="hero-terminal">
+                    <span class="prompt-user">vamsi</span>@<span class="prompt-host">security</span>:<span class="prompt-path">~</span>$ <span class="typing-text">cat ~/about.txt</span><span class="cursor">&#9612;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <h2 class="section-title">
+                <span class="gt">&gt;</span> _About <span class="terminal-cursor"></span>
+            </h2>
+            <div class="glass-card about-card">
+                <p class="about-text">
+                    Product/Application Security Engineer based in <span class="accent">Germany</span>, currently focused on:
+                </p>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <span class="material-symbols-outlined skill-icon">check_circle</span>
+                        <span>Application Security</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="material-symbols-outlined skill-icon">check_circle</span>
+                        <span>AI/ML Security</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="material-symbols-outlined skill-icon">check_circle</span>
+                        <span>DevSecOps</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="material-symbols-outlined skill-icon">check_circle</span>
+                        <span>Threat Modeling</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section" id="projects">
+            <h2 class="section-title">
+                <span class="gt">&gt;</span> _Projects
+            </h2>
+            <div class="projects-grid">
+                <div class="glass-card project-card">
+                    <div class="project-banner">
+                        <div class="project-banner-overlay"></div>
+                        <span class="material-symbols-outlined project-banner-icon">terminal</span>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-header">
+                            <h3 class="project-name">safe-packages</h3>
+                            <div class="project-links">
+                                <a href="https://github.com/thedevappsecguy/safe-packages?tab=readme-ov-file#security" target="_blank" rel="noopener noreferrer" title="GitHub">
+                                    <span class="material-symbols-outlined project-link-icon">code</span>
+                                </a>
+                                <a href="https://pypi.org/project/safe-packages/" target="_blank" rel="noopener noreferrer" title="PyPI">
+                                    <span class="material-symbols-outlined project-link-icon">package_2</span>
+                                </a>
+                            </div>
+                        </div>
+                        <p class="project-desc">
+                            A CLI tool to scan dependencies for vulnerabilities and flags potentially compromised dependencies (supply chain security).
+                        </p>
+                        <div class="tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">CLI</span>
+                            <span class="tag">Security</span>
+                            <span class="tag">OSV</span>
+                            <span class="tag">Supply-Chain</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Links Section -->
+        <section class="section" id="links">
+            <h2 class="section-title">
+                <span class="gt">&gt;</span> _Links
+            </h2>
+            <div class="links-grid">
+                <a class="glass-card link-card" href="https://github.com/thedevappsecguy" target="_blank" rel="noopener noreferrer">
+                    <div class="link-icon-wrap">
+                        <span class="material-symbols-outlined">code</span>
+                    </div>
+                    <div>
+                        <h3 class="link-name">GitHub</h3>
+                        <p class="link-desc">Source code & projects</p>
+                    </div>
+                </a>
+                <a class="glass-card link-card" href="https://www.linkedin.com/in/vamsi-krishna-bonam/" target="_blank" rel="noopener noreferrer">
+                    <div class="link-icon-wrap">
+                        <span class="material-symbols-outlined">work</span>
+                    </div>
+                    <div>
+                        <h3 class="link-name">LinkedIn</h3>
+                        <p class="link-desc">Professional network</p>
+                    </div>
+                </a>
+                <a class="glass-card link-card" href="https://www.credly.com/users/vamsikrishnabonam/" target="_blank" rel="noopener noreferrer">
+                    <div class="link-icon-wrap">
+                        <span class="material-symbols-outlined">verified_user</span>
+                    </div>
+                    <div>
+                        <h3 class="link-name">Credly</h3>
+                        <p class="link-desc">Verified certifications</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Notes Section -->
+        <section class="section" id="notes">
+            <h2 class="section-title">
+                <span class="gt">&gt;</span> _Notes
+            </h2>
+            <div class="glass-card notes-card">
+                <span class="material-symbols-outlined notes-icon">history_edu</span>
+                <h3 class="notes-title">Coming Soon</h3>
+                <p class="notes-desc">
+                    Technical write-ups, CTF solutions, and deep-dives into recent CVEs.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
     <footer class="footer">
-        <span>© 2026 Vamsi</span>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="material-symbols-outlined footer-icon">shield_lock</span>
+                <span class="footer-version">SYSTEM v2.0 </span>
+            </div>
+            <p class="footer-copy">&copy; 2026 Vamsi</p>
+        </div>
     </footer>
 </body>
 
