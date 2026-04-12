@@ -57,6 +57,11 @@ function formatDate(dateValue) {
     }).format(date);
 }
 
+function getSortTimestamp(dateValue) {
+    const date = new Date(dateValue);
+    return Number.isNaN(date.getTime()) ? Number.NEGATIVE_INFINITY : date.getTime();
+}
+
 function createTag(label) {
     const tag = document.createElement("span");
     tag.className = "tag";
@@ -92,7 +97,7 @@ function createNoteRow(note) {
     const tags = document.createElement("div");
     tags.className = "note-row-tags";
 
-    for (const label of note.tags.slice(0, 3)) {
+    for (const label of note.tags) {
         tags.appendChild(createTag(label));
     }
 
@@ -128,7 +133,11 @@ async function loadNotes() {
         }
 
         const notes = await response.json();
-        const safeNotes = Array.isArray(notes) ? notes.filter(validateNote) : [];
+        const safeNotes = Array.isArray(notes)
+            ? notes
+                .filter(validateNote)
+                .sort((left, right) => getSortTimestamp(right.date) - getSortTimestamp(left.date))
+            : [];
 
         if (!safeNotes.length) {
             setStatus(

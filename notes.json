@@ -1,12 +1,24 @@
 [
     {
+        "title": "Supply Chain Security in CI/CD",
+        "date": "Apr 11, 2026",
+        "summary": "Supply chain security in CI/CD needs more than prevention. The critical gap is detecting when workflows, credentials, runners, or dependencies are turned into attack paths.",
+        "href": "notes/ci-cd-detection.html",
+        "tags": [
+            "GitHub Actions",
+            "CircleCI",
+            "Supply Chain",
+            "Detection"
+        ]
+    },
+    {
         "title": "skill-scanner",
         "date": "Feb 19, 2026",
         "summary": "Use this when you want to review skills in any agentic workflow before they enter local workflows, CI, or other automated flows.",
         "href": "notes/skill-scanner.html",
         "tags": [
             "AI Security",
-            "skill-scanner",
+            "Skill Scanner",
             "VirusTotal"
         ]
     },
@@ -16,8 +28,8 @@
         "summary": "Use this when you want one shared skills set for recurring agentic coding workflows across tools.",
         "href": "notes/sec-skills.html",
         "tags": [
-            "Agentic Coding",
-            "sec-skills",
+            "AI Agents",
+            "Skills",
             "Claude"
         ]
     }

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="description" content="Short note about supply chain security in CI/CD, focused on attacker targets, layered controls, and lightweight detection after preventive controls fail.">
+    <meta name="author" content="Vamsi">
+    <meta name="theme-color" content="#0a0f10">
+    <title>Supply chain security in CI/CD: detecting abuse after controls fail | vamsi@security:~$</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="note-page">
+    <main class="note-shell">
+        <a class="note-back" href="../index.html#notes">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back to notes
+        </a>
+
+        <header class="glass-card note-header">
+            <span class="note-eyebrow">Apr 11, 2026</span>
+            <h1 class="note-page-title">Supply chain security in CI/CD: detecting abuse after controls fail</h1>
+            <p class="note-subtitle">
+                Supply chain security in CI/CD is not only about prevention. The harder problem is catching misuse when workflows, credentials, runners, or dependencies become attack paths inside the pipeline.
+            </p>
+            <p class="note-top-link-row">
+                <a class="note-top-link" href="https://www.linkedin.com/posts/vamsi-krishna-bonam_github-circleci-ci-activity-7448686855857827840-DcEN" target="_blank" rel="noopener noreferrer">LinkedIn post</a>
+            </p>
+            <div class="note-meta-row">
+                <span class="note-meta-pill">GitHub Actions</span>
+                <span class="note-meta-pill">CircleCI</span>
+                <span class="note-meta-pill">Supply Chain</span>
+                <span class="note-meta-pill">Detection</span>
+            </div>
+        </header>
+
+        <article class="glass-card note-article">
+            <section>
+                <h2>Why this matters</h2>
+                <p>
+                    Layered controls reduce risk, but attackers still target the workflow, the credentials it can reach, and the runner environment it executes in.
+                </p>
+            </section>
+
+            <hr class="note-divider">
+
+            <section>
+                <h2>Layered proactive controls</h2>
+                <p class="note-section-intro">
+                    These layers are all useful. The problem is that most of them reduce risk before execution or limit blast radius after compromise, without giving you much runtime signal when something actually goes wrong.
+                </p>
+                <div class="layer-stack">
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Build time</span>
+                        </div>
+                        <h3 class="layer-title">Install scripts</h3>
+                        <p class="layer-desc">Try to limit or disable arbitrary code execution during build time.</p>
+                        <p class="layer-limit">Good for reducing obvious abuse, but not for telling you what executed once the pipeline is already running.</p>
+                    </article>
+
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Dependency control</span>
+                        </div>
+                        <h3 class="layer-title">Pinned dependencies</h3>
+                        <p class="layer-desc">Visible control at the top layer of the dependency tree.</p>
+                        <p class="layer-limit">The blind spot is transitive dependencies and nested composite actions that are not directly visible, pinned, or audited.</p>
+                    </article>
+
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Release pacing</span>
+                        </div>
+                        <h3 class="layer-title">Cooldown strategies</h3>
+                        <p class="layer-desc">Useful for letting early package releases settle before they hit production pipelines.</p>
+                        <p class="layer-limit">That delay often just turns the wider community into the canary instead of detecting abuse in your own environment.</p>
+                    </article>
+
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Threat intel</span>
+                        </div>
+                        <h3 class="layer-title">Package intelligence</h3>
+                        <p class="layer-desc">Helpful for spotting known malicious or suspicious packages.</p>
+                        <p class="layer-limit">It stays reactive, and the signal often arrives after the package has already been executed somewhere.</p>
+                    </article>
+
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Workflow hardening</span>
+                        </div>
+                        <h3 class="layer-title">GitHub Actions controls</h3>
+                        <p class="layer-desc">Reduce known attack paths such as `pwn_request` style abuse and common expression-injection mistakes.</p>
+                        <p class="layer-limit">These controls close documented paths, but they are not runtime detection for malicious code that still lands in the job.</p>
+                    </article>
+
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Blast radius</span>
+                        </div>
+                        <h3 class="layer-title">Unprivileged sandboxing in CI</h3>
+                        <p class="layer-desc">Useful for containing the damage when the job environment is compromised.</p>
+                        <p class="layer-limit">It limits impact, but compromise can still happen before you know that suspicious behavior occurred.</p>
+                    </article>
+
+                    <article class="layer-card">
+                        <div class="layer-head">
+                            <span class="layer-tag">Ingress policy</span>
+                        </div>
+                        <h3 class="layer-title">Private registries and proxies</h3>
+                        <p class="layer-desc">Strong guardrails for controlling what is allowed into the pipeline.</p>
+                        <p class="layer-limit">They stay prevention-focused and policy-driven rather than confirming runtime misuse inside a successful build.</p>
+                    </article>
+                </div>
+            </section>
+
+            <hr class="note-divider">
+
+            <section>
+                <h2>What attackers target</h2>
+                <div class="signal-box">
+                    <p class="signal-outro">
+                        The attack surface extends well beyond the package itself.
+                    </p>
+                    <ul class="signal-list">
+                        <li>Confusing event behavior, unclear permission boundaries, and unexpected execution contexts that let sensitive workflows run in unsafe ways.</li>
+                        <li>Over-permissioned workflows and weak trust boundaries between repositories, actors, and triggers.</li>
+                        <li>Secrets that flow too broadly by default, especially through reusable workflows or unexpected workflow paths.</li>
+                        <li>Runners with unrestricted outbound network access, which makes secret exfiltration and unauthorized publishing easier.</li>
+                        <li>Hidden action and dependency resolution paths, including nested and transitive components that are difficult to review directly.</li>
+                    </ul>
+                    <p class="signal-outro">
+                        Recent examples:
+                    </p>
+                    <ul class="signal-list">
+                        <li><a class="note-body-link note-url-link" href="https://www.wiz.io/blog/trivy-compromised-teampcp-supply-chain-attack" target="_blank" rel="noopener noreferrer">Trivy compromised by TeamPCP</a>: malicious releases and GitHub Actions were used to steal runner credentials and exfiltrate secrets.</li>
+                        <li><a class="note-body-link note-url-link" href="https://www.wiz.io/blog/s1ngularitys-aftermath" target="_blank" rel="noopener noreferrer">s1ngularity aftermath</a>: compromised Nx packages leaked environment variables, GitHub and npm tokens, and exposed private repositories.</li>
+                        <li><a class="note-body-link note-url-link" href="https://posthog.com/blog/nov-24-shai-hulud-attack-post-mortem" target="_blank" rel="noopener noreferrer">Shai-Hulud / PostHog post-mortem</a>: a stolen bot PAT led to broader GitHub secret theft and malicious package publishing.</li>
+                    </ul>
+                    <p class="signal-outro">
+                        That is why runtime visibility matters: once the workflow starts, the build environment itself becomes the attacker&apos;s most valuable target.
+                    </p>
+                </div>
+            </section>
+
+            <hr class="note-divider">
+
+            <section>
+                <h2>Runtime signal without heavy instrumentation</h2>
+                <p class="note-section-intro">
+                    Hardening still matters, but recent supply chain incidents exposed the same gap again and again: a workflow can look normal on the surface while malicious code is already pulling credentials out of the runner.
+                </p>
+                <p>
+                    Canary credentials are useful because they turn secret theft into something visible. You place decoy credentials where real ones usually live, so the same code path that harvests legitimate secrets is likely to collect the fake ones too.
+                </p>
+                <p>
+                    That makes canaries a practical detective control in CI/CD. They do not prevent the initial compromise, but they can reveal that credentials have left the build environment and give teams a concrete signal to investigate before the compromise spreads quietly into the next system, package, or pipeline.
+                </p>
+                <figure class="note-media">
+                    <img class="note-image" src="assets/ci-cd-detection-workflows.png" alt="Protected CI workflows shown in the LinkedIn post image.">
+                    <figcaption class="note-caption">
+                        Workflows:
+                        <a class="note-body-link note-url-link" href="https://github.com/thedevappsecguy/skill-scanner/tree/main/.github/workflows" target="_blank" rel="noopener noreferrer">https://github.com/thedevappsecguy/skill-scanner/tree/main/.github/workflows</a>
+                    </figcaption>
+                </figure>
+            </section>
+
+            <hr class="note-divider">
+
+            <section>
+                <h2>Reference</h2>
+                <p>
+                    Reference:
+                    <a class="note-body-link note-url-link" href="https://www.linkedin.com/posts/vamsi-krishna-bonam_github-circleci-ci-activity-7448686855857827840-DcEN" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/posts/vamsi-krishna-bonam_github-circleci-ci-activity-7448686855857827840-DcEN</a>
+                </p>
+            </section>
+        </article>
+    </main>
+</body>
+
+</html>
