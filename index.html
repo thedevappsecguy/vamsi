@@ -7,13 +7,16 @@
     <meta name="description" content="Vamsi - Security Engineer | Product/Application Security | AI/ML Security | DevSecOps">
     <meta name="keywords" content="Security, DevSecOps, AppSec, AI/ML Security, Threat Modeling">
     <meta name="author" content="Vamsi">
+    <meta name="theme-color" content="#0a0f10">
     <title>vamsi@security:~$</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
+    <script defer src="notes.js"></script>
 </head>
 
 <body>
@@ -27,8 +30,8 @@
             <nav class="nav-links">
                 <a href="#about">About</a>
                 <a href="#projects">Projects</a>
-                <a href="#notes">Notes</a>
                 <a href="#links">Links</a>
+                <a href="#notes">Notes</a>
             </nav>
         </header>
     </div>
@@ -101,7 +104,7 @@
                             </div>
                         </div>
                         <p class="project-desc">
-                            Security scanner for AI skills and instruction files using OpenAI + VirusTotal.
+                            Security scanner for AI skills and instruction files across agentic workflows using multiple LLMs and VirusTotal.
                         </p>
                         <div class="tags">
                             <span class="tag">Python</span>
@@ -109,7 +112,7 @@
                             <span class="tag">AI-Security</span>
                             <span class="tag">agents-security</span>
                             <span class="tag">skills-security</span>
-                            <span class="tag">OpenAI</span>
+                            <span class="tag">Multi-LLM</span>
                             <span class="tag">VirusTotal</span>
                         </div>
                     </div>
@@ -129,7 +132,7 @@
                             </div>
                         </div>
                         <p class="project-desc">
-                            Shared AI agent skills repo for Claude, Cursor, and Codex.
+                            Shared AI agent skills repository for the agentic coding workflows I use in my day-to-day work.
                         </p>
                         <div class="tags">
                             <span class="tag">AI-Agents</span>
@@ -137,6 +140,7 @@
                             <span class="tag">Claude</span>
                             <span class="tag">Cursor</span>
                             <span class="tag">Codex</span>
+                            <span class="tag">Agentic-Coding</span>
                         </div>
                     </div>
                 </div>
@@ -213,12 +217,24 @@
             <h2 class="section-title">
                 <span class="gt">&gt;</span> _Notes
             </h2>
-            <div class="glass-card notes-card">
-                <span class="material-symbols-outlined notes-icon">history_edu</span>
-                <h3 class="notes-title">Coming Soon</h3>
-                <p class="notes-desc">
-                    Technical write-ups, CTF solutions, and deep-dives into recent CVEs.
-                </p>
+            <div class="notes-layout">
+                <div class="notes-grid" id="notes-list" aria-live="polite"></div>
+                <div class="glass-card notes-card notes-state" id="notes-status">
+                    <span class="material-symbols-outlined notes-icon">history_edu</span>
+                    <h3 class="notes-title">Loading Notes</h3>
+                    <p class="notes-desc">
+                        Fetching the local note index for the latest write-ups.
+                    </p>
+                </div>
+                <noscript>
+                    <div class="glass-card notes-card">
+                        <span class="material-symbols-outlined notes-icon">history_edu</span>
+                        <h3 class="notes-title">JavaScript Disabled</h3>
+                        <p class="notes-desc">
+                            Open the notes directly at <a class="notes-inline-link" href="notes/skill-scanner.html">notes/skill-scanner.html</a> or <a class="notes-inline-link" href="notes/sec-skills.html">notes/sec-skills.html</a>.
+                        </p>
+                    </div>
+                </noscript>
             </div>
         </section>
     </main>

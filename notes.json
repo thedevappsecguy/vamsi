@@ -1,0 +1,24 @@
+[
+    {
+        "title": "skill-scanner",
+        "date": "Feb 19, 2026",
+        "summary": "Use this when you want to review skills in any agentic workflow before they enter local workflows, CI, or other automated flows.",
+        "href": "notes/skill-scanner.html",
+        "tags": [
+            "AI Security",
+            "skill-scanner",
+            "VirusTotal"
+        ]
+    },
+    {
+        "title": "sec-skills",
+        "date": "Mar 23, 2026",
+        "summary": "Use this when you want one shared skills set for recurring agentic coding workflows across tools.",
+        "href": "notes/sec-skills.html",
+        "tags": [
+            "Agentic Coding",
+            "sec-skills",
+            "Claude"
+        ]
+    }
+]
