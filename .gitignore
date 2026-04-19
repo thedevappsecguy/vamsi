@@ -2,8 +2,11 @@
 .playwright-cli/
 .claude/
 node_modules/
+_site/
+# Generated frontend bundle; source of truth is assets/js/app.jsx.
+assets/js/app.js
 .DS_Store
 Thumbs.db
 *.log
 nul
-output/playwright/
+output/
