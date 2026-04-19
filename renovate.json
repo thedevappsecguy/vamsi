@@ -2,13 +2,13 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:best-practices",
-    "helpers:pinGitHubActionDigests",
     "helpers:pinGitHubActionDigestsToSemver",
     "schedule:weekly",
     ":disableDependencyDashboard"
   ],
   "enabledManagers": [
-    "github-actions"
+    "github-actions",
+    "npm"
   ],
   "minimumReleaseAge": "7 days",
   "rangeStrategy": "pin",

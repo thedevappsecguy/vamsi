@@ -1,0 +1,13 @@
+{
+  "name": "vamsi-portfolio",
+  "private": true,
+  "scripts": {
+    "build": "babel assets/js/app.jsx --out-file assets/js/app.js",
+    "build:site": "babel assets/js/app.jsx --out-file _site/assets/js/app.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.27.1",
+    "@babel/core": "7.27.1",
+    "@babel/preset-react": "7.27.1"
+  }
+}

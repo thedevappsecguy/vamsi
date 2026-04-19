@@ -1,254 +1,143 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta name="description" content="Vamsi - Security Engineer | Product/Application Security | AI/ML Security | DevSecOps">
-    <meta name="keywords" content="Security, DevSecOps, AppSec, AI/ML Security, Threat Modeling">
-    <meta name="author" content="Vamsi">
-    <meta name="theme-color" content="#0a0f10">
-    <title>vamsi@security:~$</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="notes.js"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Vamsi — Portfolio</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg"/>
+<link rel="stylesheet" href="./assets/fonts/fonts.css"/>
+
+<style>
+  html, body, #root { height: 100%; margin: 0; padding: 0; }
+  body { background: #0a0a0a; color: #fff; font-family: Inter, system-ui, sans-serif; overscroll-behavior: none; }
+  * { box-sizing: border-box; }
+  button { font-family: inherit; }
+
+
+
+
+</style>
 </head>
-
 <body>
-    <!-- Navigation -->
-    <div class="nav-wrapper">
-        <header class="nav-bar">
-            <div class="nav-brand">
-                <span class="material-symbols-outlined nav-icon">shield_lock</span>
-                <h2 class="nav-logo">VAMSI</h2>
-            </div>
-            <nav class="nav-links">
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#links">Links</a>
-                <a href="#notes">Notes</a>
-            </nav>
-        </header>
-    </div>
+<div id="root"></div>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-grid-bg"></div>
-            <div class="hero-content">
-                <div class="status-badge">STATUS: ACTIVE_OPERATOR</div>
-                <h1 class="hero-name">VAMSI</h1>
-                <h2 class="hero-subtitle">Security Engineer</h2>
-                <div class="hero-terminal">
-                    <span class="prompt-user">vamsi</span>@<span class="prompt-host">security</span>:<span class="prompt-path">~</span>$ <span class="typing-text">cat ~/about.txt</span>
-                </div>
-            </div>
-        </section>
+<script src="./assets/js/react.production.min.js"></script>
+<script src="./assets/js/react-dom.production.min.js"></script>
 
-        <!-- About Section -->
-        <section class="section" id="about">
-            <h2 class="section-title">
-                <span class="gt">&gt;</span> _About <span class="terminal-cursor"></span>
-            </h2>
-            <div class="glass-card about-card">
-                <p class="about-text">
-                    Product/Application Security Engineer based in <span class="accent">Germany</span>, currently focused on:
-                </p>
-                <div class="skills-grid">
-                    <div class="skill-item">
-                        <span class="material-symbols-outlined skill-icon">check_circle</span>
-                        <span>Application Security</span>
-                    </div>
-                    <div class="skill-item">
-                        <span class="material-symbols-outlined skill-icon">check_circle</span>
-                        <span>AI/ML Security</span>
-                    </div>
-                    <div class="skill-item">
-                        <span class="material-symbols-outlined skill-icon">check_circle</span>
-                        <span>DevSecOps</span>
-                    </div>
-                    <div class="skill-item">
-                        <span class="material-symbols-outlined skill-icon">check_circle</span>
-                        <span>Threat Modeling</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+<script>
+// Shared portfolio data
+window.PORTFOLIO = {
+  name: "Vamsi",
+  role: "Product / Application Security Engineer",
+  location: "Germany",
+  tagline: "I break things so they can be built better.",
+  status: "ACTIVE_OPERATOR",
+  focus: [
+    "Application Security",
+    "AI / ML Security",
+    "DevSecOps",
+    "Threat Modeling",
+  ],
+  about: [
+    "Product/Application Security Engineer based in Germany, currently focused on:",
+    "Lately I've been deep in AI/ML security — auditing agentic workflows, scanning skill files, and thinking hard about what happens when an LLM is both the attacker and the defender.",
+    "I build small, sharp open-source tools that solve the problem in front of me. Three of them are below.",
+  ],
+  projects: [
+    {
+      slug: "skill-scanner",
+      name: "skill-scanner",
+      kind: "CLI",
+      blurb:
+        "Security scanner for AI skills and instruction files across agentic workflows. Uses multiple LLMs plus VirusTotal to flag prompt injection, data-exfil patterns, and suspicious capability escalations.",
+      tags: ["Python", "CLI", "AI-Security", "Agents", "Multi-LLM", "VirusTotal"],
+      links: [
+        { label: "GitHub", href: "https://github.com/thedevappsecguy/skill-scanner", kind: "code" },
+        { label: "PyPI", href: "https://pypi.org/project/skill-scanner/", kind: "pkg" },
+      ],
+      install: "pip install skill-scanner",
+      stars: null,
+      version: null,
+    },
+    {
+      slug: "sec-skills",
+      name: "sec-skills",
+      kind: "Skills",
+      blurb:
+        "Shared AI agent skills repository for the agentic coding workflows I use day-to-day. Battle-tested prompts, guardrails, and review checklists for Claude, Cursor, and Codex.",
+      tags: ["AI-Agents", "Skills", "Claude", "Cursor", "Codex", "Agentic"],
+      links: [
+        { label: "GitHub", href: "https://github.com/thedevappsecguy/sec-skills", kind: "code" },
+      ],
+      install: "git clone https://github.com/thedevappsecguy/sec-skills",
+      stars: null,
+      version: null,
+    },
+    {
+      slug: "safe-packages",
+      name: "safe-packages",
+      kind: "CLI",
+      blurb:
+        "A CLI tool to scan dependencies for vulnerabilities and flag potentially compromised packages. Supply-chain security for the paranoid — OSV-backed with heuristics for typosquats and sudden maintainer changes.",
+      tags: ["Python", "CLI", "Security", "OSV", "Supply-Chain"],
+      links: [
+        { label: "GitHub", href: "https://github.com/thedevappsecguy/safe-packages", kind: "code" },
+        { label: "PyPI", href: "https://pypi.org/project/safe-packages/", kind: "pkg" },
+      ],
+      install: "pip install safe-packages",
+      stars: null,
+      version: null,
+    },
+  ],
+  links: [
+    { label: "GitHub", sub: "Source code & projects", href: "https://github.com/thedevappsecguy", kind: "code" },
+    { label: "LinkedIn", sub: "Professional network", href: "https://www.linkedin.com/in/vamsi-krishna-bonam/", kind: "work" },
+    { label: "Credly", sub: "Verified certifications", href: "https://www.credly.com/users/vamsikrishnabonam/", kind: "cert" },
+  ],
+  notes: [
+    {
+      slug: "ci-cd-detection",
+      title: "Supply Chain Security in CI/CD",
+      date: "Apr 11, 2026",
+      read: null,
+      summary: "Supply chain security in CI/CD needs more than prevention. The critical gap is detecting when workflows, credentials, runners, or dependencies are turned into attack paths.",
+      tags: ["GitHub Actions", "CircleCI", "Supply Chain", "Detection"],
+      url: "notes/ci-cd-detection.html",
+    },
+    {
+      slug: "sec-skills",
+      title: "sec-skills",
+      date: "Mar 23, 2026",
+      read: null,
+      summary: "Use this when you want one shared skills set for recurring agentic coding workflows across tools.",
+      tags: ["AI Agents", "Skills", "Claude"],
+      url: "notes/sec-skills.html",
+    },
+    {
+      slug: "skill-scanner",
+      title: "skill-scanner",
+      date: "Feb 19, 2026",
+      read: null,
+      summary: "Use this when you want to review skills in any agentic workflow before they enter local workflows, CI, or other automated flows.",
+      tags: ["AI Security", "Skill Scanner", "VirusTotal"],
+      url: "notes/skill-scanner.html",
+    },
+  ],
+  certs: [],
+};
 
-        <!-- Projects Section -->
-        <section class="section" id="projects">
-            <h2 class="section-title">
-                <span class="gt">&gt;</span> _Projects
-            </h2>
-            <div class="projects-grid">
-                <div class="glass-card project-card">
-                    <div class="project-banner">
-                        <div class="project-banner-overlay"></div>
-                        <span class="material-symbols-outlined project-banner-icon">smart_toy</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-header">
-                            <h3 class="project-name">skill-scanner</h3>
-                            <div class="project-links">
-                                <a href="https://github.com/thedevappsecguy/skill-scanner" target="_blank" rel="noopener noreferrer" title="GitHub">
-                                    <span class="material-symbols-outlined project-link-icon">code</span>
-                                </a>
-                                <a href="https://pypi.org/project/skill-scanner/" target="_blank" rel="noopener noreferrer" title="PyPI">
-                                    <span class="material-symbols-outlined project-link-icon">package_2</span>
-                                </a>
-                            </div>
-                        </div>
-                        <p class="project-desc">
-                            Security scanner for AI skills and instruction files across agentic workflows using multiple LLMs and VirusTotal.
-                        </p>
-                        <div class="tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">CLI</span>
-                            <span class="tag">AI-Security</span>
-                            <span class="tag">agents-security</span>
-                            <span class="tag">skills-security</span>
-                            <span class="tag">Multi-LLM</span>
-                            <span class="tag">VirusTotal</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card project-card">
-                    <div class="project-banner">
-                        <div class="project-banner-overlay"></div>
-                        <span class="material-symbols-outlined project-banner-icon">extension</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-header">
-                            <h3 class="project-name">sec-skills</h3>
-                            <div class="project-links">
-                                <a href="https://github.com/thedevappsecguy/sec-skills" target="_blank" rel="noopener noreferrer" title="GitHub">
-                                    <span class="material-symbols-outlined project-link-icon">code</span>
-                                </a>
-                            </div>
-                        </div>
-                        <p class="project-desc">
-                            Shared AI agent skills repository for the agentic coding workflows I use in my day-to-day work.
-                        </p>
-                        <div class="tags">
-                            <span class="tag">AI-Agents</span>
-                            <span class="tag">Skills</span>
-                            <span class="tag">Claude</span>
-                            <span class="tag">Cursor</span>
-                            <span class="tag">Codex</span>
-                            <span class="tag">Agentic-Coding</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card project-card">
-                    <div class="project-banner">
-                        <div class="project-banner-overlay"></div>
-                        <span class="material-symbols-outlined project-banner-icon">terminal</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-header">
-                            <h3 class="project-name">safe-packages</h3>
-                            <div class="project-links">
-                                <a href="https://github.com/thedevappsecguy/safe-packages?tab=readme-ov-file#security" target="_blank" rel="noopener noreferrer" title="GitHub">
-                                    <span class="material-symbols-outlined project-link-icon">code</span>
-                                </a>
-                                <a href="https://pypi.org/project/safe-packages/" target="_blank" rel="noopener noreferrer" title="PyPI">
-                                    <span class="material-symbols-outlined project-link-icon">package_2</span>
-                                </a>
-                            </div>
-                        </div>
-                        <p class="project-desc">
-                            A CLI tool to scan dependencies for vulnerabilities and flags potentially compromised dependencies (supply chain security).
-                        </p>
-                        <div class="tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">CLI</span>
-                            <span class="tag">Security</span>
-                            <span class="tag">OSV</span>
-                            <span class="tag">Supply-Chain</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+</script>
 
-        <!-- Links Section -->
-        <section class="section" id="links">
-            <h2 class="section-title">
-                <span class="gt">&gt;</span> _Links
-            </h2>
-            <div class="links-grid">
-                <a class="glass-card link-card" href="https://github.com/thedevappsecguy" target="_blank" rel="noopener noreferrer">
-                    <div class="link-icon-wrap">
-                        <span class="material-symbols-outlined">code</span>
-                    </div>
-                    <div>
-                        <h3 class="link-name">GitHub</h3>
-                        <p class="link-desc">Source code & projects</p>
-                    </div>
-                </a>
-                <a class="glass-card link-card" href="https://www.linkedin.com/in/vamsi-krishna-bonam/" target="_blank" rel="noopener noreferrer">
-                    <div class="link-icon-wrap">
-                        <span class="material-symbols-outlined">work</span>
-                    </div>
-                    <div>
-                        <h3 class="link-name">LinkedIn</h3>
-                        <p class="link-desc">Professional network</p>
-                    </div>
-                </a>
-                <a class="glass-card link-card" href="https://www.credly.com/users/vamsikrishnabonam/" target="_blank" rel="noopener noreferrer">
-                    <div class="link-icon-wrap">
-                        <span class="material-symbols-outlined">verified_user</span>
-                    </div>
-                    <div>
-                        <h3 class="link-name">Credly</h3>
-                        <p class="link-desc">Verified certifications</p>
-                    </div>
-                </a>
-            </div>
-        </section>
+<!-- EDITMODE defaults (do not remove markers) -->
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "variant": "editorial",
+    "mode": "dark",
+    "reducedMotion": false
+  }/*EDITMODE-END*/;
+</script>
 
-        <!-- Notes Section -->
-        <section class="section" id="notes">
-            <h2 class="section-title">
-                <span class="gt">&gt;</span> _Notes
-            </h2>
-            <div class="notes-layout">
-                <div class="notes-grid" id="notes-list" aria-live="polite"></div>
-                <div class="glass-card notes-card notes-state" id="notes-status">
-                    <span class="material-symbols-outlined notes-icon">history_edu</span>
-                    <h3 class="notes-title">Loading Notes</h3>
-                    <p class="notes-desc">
-                        Fetching the local note index for the latest write-ups.
-                    </p>
-                </div>
-                <noscript>
-                    <div class="glass-card notes-card">
-                        <span class="material-symbols-outlined notes-icon">history_edu</span>
-                        <h3 class="notes-title">JavaScript Disabled</h3>
-                        <p class="notes-desc">
-                            Open the notes directly at <a class="notes-inline-link" href="notes/ci-cd-detection.html">notes/ci-cd-detection.html</a>, <a class="notes-inline-link" href="notes/skill-scanner.html">notes/skill-scanner.html</a>, or <a class="notes-inline-link" href="notes/sec-skills.html">notes/sec-skills.html</a>.
-                        </p>
-                    </div>
-                </noscript>
-            </div>
-        </section>
-    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <span class="material-symbols-outlined footer-icon">shield_lock</span>
-                <span class="footer-version">SYSTEM v2.0 </span>
-            </div>
-            <p class="footer-copy">&copy; 2026 Vamsi</p>
-        </div>
-    </footer>
+<script src="./assets/js/app.js"></script>
 </body>
-
 </html>
