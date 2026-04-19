@@ -87,11 +87,7 @@ body.light {
       var hex = Array.from(bytes, function(byte) { return byte.toString(16).padStart(2, '0'); });
       return hex.slice(0, 4).join('') + '-' + hex.slice(4, 6).join('') + '-' + hex.slice(6, 8).join('') + '-' + hex.slice(8, 10).join('') + '-' + hex.slice(10).join('');
     }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(char) {
-      var rand = Math.random() * 16 | 0;
-      var value = char === 'x' ? rand : (rand & 3) | 8;
-      return value.toString(16);
-    });
+    return 'session-unavailable';
   }
   function readModePreference() {
     try {
