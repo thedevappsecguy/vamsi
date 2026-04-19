@@ -69,7 +69,7 @@ body.light {
 /* Topbar — identical to index.html */
 .ops-topbar {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 16px;
   padding: 10px 14px;
   background: var(--bg-2);
@@ -90,8 +90,10 @@ body.light {
 }
 @keyframes ops-blink { 0%,100%{opacity:1} 50%{opacity:.5} }
 .node { display:flex; align-items:center; gap:8px; color:var(--ink); }
-.crumbs { display:flex; gap:18px; }
+.crumbs { display:flex; gap:18px; min-width:0; flex-wrap:wrap; }
 .crumbs span[data-k]::before { content:attr(data-k) ' '; color:var(--ink-3); }
+.crumbs span[data-k="BUILD"] { white-space:nowrap; }
+.crumbs span[data-k="SESSION"] { min-width:0; flex:1 1 320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .clock { color:var(--ink); font-variant-numeric:tabular-nums; }
 @media (max-width:640px) {
   .ops-topbar { grid-template-columns: auto auto; }
@@ -176,6 +178,22 @@ body.light {
 </style>
 <script>
   let dark = true;
+  function createSessionId() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+    if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+      var bytes = new Uint8Array(16);
+      window.crypto.getRandomValues(bytes);
+      bytes[6] = (bytes[6] & 15) | 64;
+      bytes[8] = (bytes[8] & 63) | 128;
+      var hex = Array.from(bytes, function(byte) { return byte.toString(16).padStart(2, '0'); });
+      return hex.slice(0, 4).join('') + '-' + hex.slice(4, 6).join('') + '-' + hex.slice(6, 8).join('') + '-' + hex.slice(8, 10).join('') + '-' + hex.slice(10).join('');
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(char) {
+      var rand = Math.random() * 16 | 0;
+      var value = char === 'x' ? rand : (rand & 3) | 8;
+      return value.toString(16);
+    });
+  }
   function readModePreference() {
     try {
       var raw = localStorage.getItem('vamsi-mode');
@@ -220,7 +238,11 @@ body.light {
     }
     tick(); uptick(); setInterval(function(){ tick(); uptick(); }, 1000);
     var sid = document.getElementById('session-display');
-    if (sid) sid.textContent = Math.random().toString(36).slice(2,6)+'-'+Math.random().toString(36).slice(2,6);
+    if (sid) {
+      var sessionId = createSessionId();
+      sid.textContent = sessionId;
+      sid.title = sessionId;
+    }
   });
 </script>
 </head>
@@ -234,7 +256,7 @@ body.light {
       <span data-k="OP">ACTIVE</span>
       <span data-k="UPTIME" id="uptime-display">00:00:00</span>
       <span data-k="LOC">GERMANY</span>
-      <span data-k="BUILD">v2.0</span>
+      <span data-k="BUILD">2.0.0</span>
       <span data-k="MODE">FIELD_NOTE</span>
       <span data-k="SESSION" id="session-display">----</span>
     </div>
@@ -284,7 +306,7 @@ body.light {
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 4px;font-family:var(--mono);font-size:10px;color:var(--ink-3);">
         <a href="../index.html" style="color:var(--accent);text-decoration:none;letter-spacing:0.08em;">← BACK TO PORTFOLIO</a>
-        <span>© 2026 vamsi · ops console v2.0</span>
+        <span>© 2026 vamsi · ops console 2.0.0</span>
       </div>
     </div>
   </div>

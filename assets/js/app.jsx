@@ -17,6 +17,24 @@ function usePersistent(key, initial) {
 }
 
 const MODE_STORAGE_KEY = 'vamsi-mode';
+const BUILD_VERSION = '2.0.0';
+
+function createSessionId() {
+  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  if (window.crypto?.getRandomValues) {
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0'));
+    return `${hex.slice(0, 4).join('')}-${hex.slice(4, 6).join('')}-${hex.slice(6, 8).join('')}-${hex.slice(8, 10).join('')}-${hex.slice(10).join('')}`;
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+    const rand = Math.random() * 16 | 0;
+    const value = char === 'x' ? rand : (rand & 0x3) | 0x8;
+    return value.toString(16);
+  });
+}
 
 function readModePreference(defaultMode = 'dark') {
   try {
@@ -851,7 +869,7 @@ function EditorialVariant() {
 
             <footer className="ed-footer">
               <span>© 2026 Vamsi · All rights reserved</span>
-              <span>Built with care · v2.0</span>
+              <span>Built with care · {BUILD_VERSION}</span>
             </footer>
           </main>
         </div>
@@ -1265,7 +1283,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
   const data = window.PORTFOLIO;
   const [clock, setClock] = useState(() => new Date());
   const [activePanel, setActivePanel] = useState(() => window.PORTFOLIO.projects[0]?.slug || 'overview');
-  const sessionId = useState(() => Math.random().toString(36).slice(2,6) + '-' + Math.random().toString(36).slice(2,6))[0];
+  const [sessionId] = useState(createSessionId);
 
   useEffect(() => {
     const id = setInterval(() => setClock(new Date()), 1000);
@@ -1365,7 +1383,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
         }
         .ops-topbar {
           display: grid;
-          grid-template-columns: auto 1fr auto;
+          grid-template-columns: auto minmax(0, 1fr) auto;
           gap: 16px;
           padding: 10px 14px;
           background: var(--bg-2);
@@ -1388,8 +1406,16 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
           animation: ops-blink 2s ease-in-out infinite;
         }
         @keyframes ops-blink { 0%,100%{opacity:1} 50%{opacity:.5} }
-        .ops-topbar .crumbs { display: flex; gap: 18px; flex-wrap: wrap; }
+        .ops-topbar .crumbs { display: flex; gap: 18px; flex-wrap: wrap; min-width: 0; }
         .ops-topbar .crumbs span[data-k]::before { content: attr(data-k) ' '; color: var(--ink-3); }
+        .ops-topbar .crumbs span[data-k="BUILD"] { white-space: nowrap; }
+        .ops-topbar .crumbs span[data-k="SESSION"] {
+          min-width: 0;
+          flex: 1 1 320px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
         .ops-topbar .clock { color: var(--ink); font-variant-numeric: tabular-nums; }
         @media (max-width: 640px) {
           .ops-topbar { grid-template-columns: auto auto; }
@@ -1772,8 +1798,8 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
               <span data-k="OP">ACTIVE</span>
               <span data-k="UPTIME">{uptime}</span>
               <span data-k="LOC">{data.location.toUpperCase()}</span>
-              <span data-k="BUILD">v2.0</span>
-              <span data-k="SESSION">{sessionId}</span>
+              <span data-k="BUILD">{BUILD_VERSION}</span>
+              <span data-k="SESSION" title={sessionId}>{sessionId}</span>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:14 }}>
               <span className="clock">{timeStr}</span>
@@ -1959,7 +1985,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
           </div>
 
           <div style={{ fontFamily:'var(--mono)', fontSize: 10, color:'var(--ink-3)', padding:'8px 4px', display:'flex', justifyContent:'space-between' }}>
-            <span>© 2026 vamsi · ops console v2.0</span>
+            <span>© 2026 vamsi · ops console {BUILD_VERSION}</span>
             <span>last rebuild: {data.notes[0].date}</span>
           </div>
         </div>
