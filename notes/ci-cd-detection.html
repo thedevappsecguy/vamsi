@@ -105,6 +105,19 @@ body.light {
       localStorage.setItem('vamsi-mode', mode);
     } catch {}
   }
+  function formatTimezoneOffset(date) {
+    var pad = function(value) { return String(value).padStart(2, '0'); };
+    var offsetMinutes = -date.getTimezoneOffset();
+    var offsetSign = offsetMinutes >= 0 ? '+' : '-';
+    var offsetAbs = Math.abs(offsetMinutes);
+    return 'UTC' + offsetSign + pad(Math.floor(offsetAbs / 60)) + ':' + pad(offsetAbs % 60);
+  }
+  function formatLocalClock(date) {
+    var pad = function(value) { return String(value).padStart(2, '0'); };
+    return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) + ' ' +
+      pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds()) + ' ' +
+      formatTimezoneOffset(date);
+  }
   function applyMode(mode) {
     dark = mode !== 'light';
     document.body.classList.toggle('light', mode === 'light');
@@ -120,17 +133,11 @@ body.light {
   document.addEventListener('DOMContentLoaded', function() {
     applyMode(readModePreference());
     function tick() {
-      var n = new Date(), s = n.toISOString().replace('T',' ').slice(0,19)+'Z';
-      var e = document.getElementById('clock-display'); if (e) e.textContent = s;
-    }
-    function uptick() {
       var now = new Date();
-      var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
-      var pad = n => String(n).padStart(2,'0');
-      var e = document.getElementById('uptime-display');
-      if (e) e.textContent = pad(h)+':'+pad(m)+':'+pad(s);
+      var clock = document.getElementById('clock-display');
+      if (clock) clock.textContent = formatLocalClock(now);
     }
-    tick(); uptick(); setInterval(function(){ tick(); uptick(); }, 1000);
+    tick(); setInterval(tick, 1000);
     var sid = document.getElementById('session-display');
     if (sid) {
       var sessionId = createSessionId();
@@ -148,14 +155,13 @@ body.light {
     <div style="display:flex;align-items:center;gap:16px;"><a class="note-back-link" href="../index.html">← BACK</a><span class="node"><span class="ops-dot"></span>NODE_VAMSI_01</span></div>
     <div class="crumbs">
       <span data-k="OP">ACTIVE</span>
-      <span data-k="UPTIME" id="uptime-display">00:00:00</span>
       <span data-k="LOC">GERMANY</span>
       <span data-k="BUILD">2.0.0</span>
       <span data-k="MODE">FIELD_NOTE</span>
       <span data-k="SESSION" id="session-display">----</span>
     </div>
     <div style="display:flex;align-items:center;gap:14px;">
-      <span class="clock" id="clock-display"></span>
+      <span class="clock" id="clock-display" title="Live local time from this browser"></span>
       <button id="mode-toggle" onclick="toggleMode()" style="background:rgba(255,255,255,0.08);border:1px solid var(--rule-2);border-radius:999px;width:44px;height:24px;cursor:pointer;padding:2px;display:flex;align-items:center;justify-content:flex-start;transition:background 300ms;" title="Toggle">
         <div id="mode-knob" style="width:20px;height:20px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.2);"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10.5 7.5a5 5 0 01-6-6 5 5 0 106 6z" fill="#0f131a"/></svg></div>
       </button>
@@ -236,7 +242,7 @@ body.light {
           </section>
         </div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 4px;font-family:var(--mono);font-size:10px;color:var(--ink-3);">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 4px;font-family:var(--mono);font-size:10px;color:var(--ink-3);">
         <a href="../index.html" style="color:var(--accent);text-decoration:none;letter-spacing:0.08em;">← BACK TO PORTFOLIO</a>
         <span>© 2026 vamsi · ops console 2.0.0</span>
       </div>

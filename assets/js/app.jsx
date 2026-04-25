@@ -50,6 +50,26 @@ function writeModePreference(mode) {
   } catch {}
 }
 
+function formatTimezoneOffset(date) {
+  const pad = (value) => String(value).padStart(2, '0');
+  const offsetMinutes = -date.getTimezoneOffset();
+  const offsetSign = offsetMinutes >= 0 ? '+' : '-';
+  const offsetAbs = Math.abs(offsetMinutes);
+  const offsetHours = pad(Math.floor(offsetAbs / 60));
+  const offsetMins = pad(offsetAbs % 60);
+
+  return `UTC${offsetSign}${offsetHours}:${offsetMins}`;
+}
+
+function formatLocalClock(date) {
+  const pad = (value) => String(value).padStart(2, '0');
+  return [
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
+    `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`,
+    formatTimezoneOffset(date),
+  ].join(' ');
+}
+
 // In-view fade/slide
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
@@ -1286,8 +1306,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
     return () => clearInterval(id);
   }, []);
 
-  const timeStr = clock.toISOString().replace('T', ' ').slice(0, 19) + 'Z';
-  const uptime = `${String(Math.floor((clock.getTime() / 1000) % 86400 / 3600)).padStart(2,'0')}:${String(Math.floor((clock.getTime()/1000)%3600/60)).padStart(2,'0')}:${String(Math.floor((clock.getTime()/1000)%60)).padStart(2,'0')}`;
+  const timeStr = formatLocalClock(clock);
 
   return (
     <div className="ops-root" data-mode={mode}>
@@ -1533,6 +1552,14 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
         .ops-col-grow { flex: 1; }
         @media (max-width: 960px) {
           .ops-layout { grid-template-columns: 1fr; }
+          .ops-col { display: contents; }
+          .ops-profile-panel { order: 1; }
+          .ops-projects-panel { order: 2; }
+          .ops-project-detail-panel { order: 3; }
+          .ops-links-panel { order: 4; }
+          .ops-feed-panel { order: 5; }
+          .ops-telemetry-panel { order: 6; }
+          .ops-credentials-panel { order: 7; }
         }
 
         .ops-project-list { display: flex; flex-direction: column; }
@@ -1541,13 +1568,25 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
           grid-template-columns: auto 1fr auto auto;
           gap: 16px;
           padding: 14px 18px;
+          width: 100%;
+          appearance: none;
+          background: transparent;
+          border: 0;
           border-top: 1px solid var(--rule);
           align-items: center;
+          color: inherit;
           cursor: pointer;
+          font: inherit;
+          text-align: left;
           transition: background 120ms;
         }
         .ops-project-row:first-child { border-top: 0; }
         .ops-project-row:hover { background: var(--bg-3); }
+        .ops-project-row:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: -2px;
+          background: var(--bg-3);
+        }
         .ops-project-row[data-active="true"] { background: var(--bg-3); }
         .ops-project-badge {
           width: 32px; height: 32px;
@@ -1792,13 +1831,12 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
             <span className="node"><span className="ops-dot"/>NODE_VAMSI_01</span>
             <div className="crumbs">
               <span data-k="OP">ACTIVE</span>
-              <span data-k="UPTIME">{uptime}</span>
               <span data-k="LOC">{data.location.toUpperCase()}</span>
               <span data-k="BUILD">{BUILD_VERSION}</span>
               <span data-k="SESSION" title={sessionId}>{sessionId}</span>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:14 }}>
-              <span className="clock">{timeStr}</span>
+              <span className="clock" title="Live local time from this browser">{timeStr}</span>
               <button
                 onClick={onToggleMode}
                 style={{
@@ -1830,7 +1868,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
 
             {/* Left column */}
             <div className="ops-col">
-              <div className="ops-panel ops-id">
+              <div className="ops-panel ops-id ops-profile-panel">
                 <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.14em', marginBottom: 12 }}>
                   // OPERATOR_PROFILE
                 </div>
@@ -1841,17 +1879,19 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
                   {data.focus.map(f => <span key={f} className="chip">{f}</span>)}
                 </div>
               </div>
-              <div className="ops-panel">
+              <div className="ops-panel ops-projects-panel">
                 <div className="ops-panel-head">
                   <span>// OSS_PROJECTS</span>
                   <span className="tag">{data.projects.length} ACTIVE</span>
                 </div>
                 <div className="ops-project-list">
                   {data.projects.map((p) => (
-                    <div
+                    <button
+                      type="button"
                       key={p.slug}
                       className="ops-project-row"
                       data-active={activePanel === p.slug}
+                      aria-pressed={activePanel === p.slug}
                       onClick={() => setActivePanel(p.slug)}
                     >
                       <div className="ops-project-badge">
@@ -1863,11 +1903,11 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
                       </div>
                       {p.stars != null ? <div className="ops-project-stars">★ {p.stars}</div> : <div className="ops-project-stars"/>}
                       <div className="ops-project-status">ONLINE</div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
-              <div className="ops-panel ops-col-grow">
+              <div className="ops-panel ops-col-grow ops-credentials-panel">
                 <div className="ops-panel-head">
                   <span>// CREDENTIALS</span>
                   <span className="tag">{CERTS.length} BADGES</span>
@@ -1878,7 +1918,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
 
             {/* Right column */}
             <div className="ops-col">
-              <div className="ops-panel">
+              <div className="ops-panel ops-telemetry-panel">
                 <div className="ops-panel-head">
                   <span>// TELEMETRY</span>
                   <span className="tag">LIVE</span>
@@ -1890,7 +1930,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
                   <div className="ops-metric"><div className="k">Status</div><div className="v">ON</div><div className="sub">operator</div></div>
                 </div>
               </div>
-              <div className="ops-panel">
+              <div className="ops-panel ops-project-detail-panel">
                 <div className="ops-panel-head">
                   <span>// PROJECT_INSPECTOR</span>
                   <span className="tag">{activePanel === 'overview' ? 'IDLE' : 'FOCUS'}</span>
@@ -1930,7 +1970,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
                   );
                 })()}
               </div>
-              <div className="ops-panel">
+              <div className="ops-panel ops-links-panel">
                 <div className="ops-panel-head">
                   <span>// OUTBOUND_CHANNELS</span>
                 </div>
@@ -1956,7 +1996,7 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
                   ))}
                 </div>
               </div>
-              <div className="ops-panel ops-col-grow">
+              <div className="ops-panel ops-col-grow ops-feed-panel">
                 <div className="ops-panel-head">
                   <span>// FIELD_NOTES</span>
                   <span className="tag">{data.notes.length} ENTRIES</span>
@@ -1980,9 +2020,9 @@ function OpsVariant({ mode = 'dark', onToggleMode }) {
 
           </div>
 
-          <div style={{ fontFamily:'var(--mono)', fontSize: 10, color:'var(--ink-3)', padding:'8px 4px', display:'flex', justifyContent:'space-between' }}>
+          <div style={{ fontFamily:'var(--mono)', fontSize: 10, color:'var(--ink-3)', padding:'8px 4px', display:'flex', justifyContent:'space-between', gap: 8, flexWrap:'wrap' }}>
             <span>© 2026 vamsi · ops console {BUILD_VERSION}</span>
-            <span>last rebuild: {data.notes[0].date}</span>
+            <span>latest note: {data.notes[0].date}</span>
           </div>
         </div>
       </div>
