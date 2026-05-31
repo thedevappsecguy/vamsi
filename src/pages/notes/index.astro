@@ -1,0 +1,101 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE_DESCRIPTION, withBase } from "../../consts";
+
+const posts = (await getCollection("notes")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+---
+
+<BaseLayout title="Notes" description={SITE_DESCRIPTION}>
+  <main class="archive-page shell">
+    <header class="archive-header">
+      <p class="eyebrow">Notes</p>
+      <h1 class="display-heading">Notes</h1>
+    </header>
+
+    <ol class="archive-list">
+      {posts.map((post) => (
+        <li>
+          <a href={withBase(`notes/${post.id}/`)}>
+            <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+            <span>
+              <strong>{post.data.title}</strong>
+              <small>{post.data.summary}</small>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </main>
+</BaseLayout>
+
+<style>
+  .archive-page {
+    padding: 4rem 0 5rem;
+  }
+
+  .archive-header {
+    max-width: 740px;
+    margin-bottom: 3rem;
+  }
+
+  .archive-header .display-heading {
+    margin: 0.45rem 0 0;
+  }
+
+  .archive-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .archive-list li {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .archive-list li:last-child {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .archive-list a {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 2rem;
+    padding: 1.35rem 0;
+  }
+
+  .archive-list time {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .archive-list span {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .archive-list strong {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+  }
+
+  .archive-list small {
+    color: var(--text-muted);
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .archive-list a {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>

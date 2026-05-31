@@ -1,0 +1,108 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE_DESCRIPTION, withBase } from "../../consts";
+import { tagSlug } from "../../utils/tags";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("notes");
+  const tagMap = new Map<string, typeof posts>();
+
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)?.push(post);
+    }
+  }
+
+  return [...tagMap.entries()].map(([tag, taggedPosts]) => ({
+    params: { tag: tagSlug(tag) },
+    props: { tag, posts: taggedPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()) },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+---
+
+<BaseLayout title={`#${tag}`} description={SITE_DESCRIPTION}>
+  <main class="tag-page shell">
+    <a class="back-link" href={withBase("tags/")}>Back to tags</a>
+    <header>
+      <p class="eyebrow">{posts.length} {posts.length === 1 ? "entry" : "entries"}</p>
+      <h1 class="display-heading">#{tag}</h1>
+    </header>
+
+    <ol class="tag-list">
+      {posts.map((post) => (
+        <li>
+          <a href={withBase(`notes/${post.id}/`)}>
+            <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+            <strong>{post.data.title}</strong>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </main>
+</BaseLayout>
+
+<style>
+  .tag-page {
+    padding: 4rem 0 5rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    margin-bottom: 2rem;
+    color: var(--accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tag-page .display-heading {
+    margin: 0.45rem 0 2rem;
+  }
+
+  .tag-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tag-list li {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .tag-list li:last-child {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tag-list a {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 2rem;
+    padding: 1.1rem 0;
+  }
+
+  .tag-list time {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .tag-list strong {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .tag-list a {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>

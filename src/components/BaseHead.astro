@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import { SITE_TITLE, withBase } from "../consts";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  date?: Date | string;
+}
+
+const { title, description, image = withBase("favicon.svg"), date } = Astro.props;
+const fullTitle = title === SITE_TITLE ? `${SITE_TITLE} - Portfolio` : `${title} - ${SITE_TITLE}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+---
+
+<script is:inline>
+  (() => {
+    const key = "vamsi-theme";
+    const stored = localStorage.getItem(key);
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (stored === "dark" || (!stored && prefersDark)) {
+      document.documentElement.classList.add("dark");
+    }
+  })();
+</script>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<style is:inline>
+  @font-face {
+    font-family: "Atkinson";
+    src: url("/vamsi/fonts/atkinson-regular.woff") format("woff");
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Atkinson";
+    src: url("/vamsi/fonts/atkinson-bold.woff") format("woff");
+    font-weight: 700;
+    font-display: swap;
+  }
+</style>
+<link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
+<link rel="canonical" href={canonicalURL} />
+<link rel="sitemap" href={withBase("sitemap-index.xml")} />
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={withBase("rss.xml")} />
+
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
+<meta name="description" content={description} />
+{date && <meta name="date" content={typeof date === "string" ? date : date.toISOString().slice(0, 10)} />}
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />

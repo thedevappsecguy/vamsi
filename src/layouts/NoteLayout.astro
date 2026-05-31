@@ -1,0 +1,261 @@
+---
+import type { MarkdownHeading } from "astro";
+import BaseLayout from "./BaseLayout.astro";
+import { SITE_DESCRIPTION, withBase } from "../consts";
+import { tagPath } from "../utils/tags";
+
+interface Props {
+  title: string;
+  displayTitle?: string;
+  description: string;
+  summary: string;
+  pubDate: Date;
+  tags: string[];
+  topLink?: string;
+  topLinkLabel?: string;
+  featuredImage?: string;
+  headings: MarkdownHeading[];
+}
+
+const {
+  title,
+  displayTitle,
+  description,
+  summary,
+  pubDate,
+  tags,
+  topLink,
+  topLinkLabel,
+  featuredImage,
+  headings,
+} = Astro.props;
+
+const visibleHeadings = headings.filter((heading) => heading.depth <= 3);
+const formattedDate = pubDate.toLocaleDateString("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+---
+
+<BaseLayout title={title} description={summary || SITE_DESCRIPTION} image={featuredImage} date={pubDate}>
+  <main class="note-page">
+    <article class="note-shell">
+      <a class="back-link" href={withBase("notes/")}>Back to notes</a>
+      <header class="note-header">
+        <p class="eyebrow">{formattedDate}</p>
+        <h1 class="display-heading">{displayTitle || title}</h1>
+        <p>{description}</p>
+        {topLink && (
+          <a class="text-link" href={topLink} target="_blank" rel="noopener noreferrer">
+            {topLinkLabel || "Reference"}
+          </a>
+        )}
+        <ul class="pill-list">
+          {tags.map((tag) => (
+            <li><a class="pill" href={tagPath(tag)}>#{tag}</a></li>
+          ))}
+        </ul>
+      </header>
+
+      <div class="content-grid">
+        <div class="prose">
+          <slot />
+        </div>
+
+        {visibleHeadings.length > 0 && (
+          <aside class="toc" aria-label="Table of contents">
+            <p>On This Page</p>
+            <nav>
+              {visibleHeadings.map((heading) => (
+                <a href={`#${heading.slug}`} data-depth={heading.depth}>{heading.text}</a>
+              ))}
+            </nav>
+          </aside>
+        )}
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .note-page {
+    padding: 3rem 0 5rem;
+  }
+
+  .note-shell {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto;
+  }
+
+  .back-link {
+    display: inline-flex;
+    margin-bottom: 2rem;
+    color: var(--accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .note-header {
+    max-width: 760px;
+    margin-bottom: 3rem;
+  }
+
+  .note-header .display-heading {
+    margin: 0.45rem 0 1rem;
+  }
+
+  .note-header p:not(.eyebrow) {
+    margin: 0 0 1rem;
+    color: var(--text-muted);
+    font-size: clamp(1.02rem, 1.7vw, 1.25rem);
+    line-height: 1.75;
+  }
+
+  .note-header .pill-list {
+    margin-top: 1.2rem;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 760px) 240px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .prose {
+    color: var(--text-secondary);
+    font-size: 1.04rem;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin: 2.7rem 0 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.55rem;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.2rem;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--text-secondary);
+  }
+
+  .prose :global(p) {
+    margin: 0 0 1.35rem;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.5rem;
+    padding-left: 1.35rem;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.55rem;
+  }
+
+  .prose :global(a) {
+    color: var(--accent-strong);
+    font-weight: 700;
+  }
+
+  .prose :global(code) {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    padding: 0.12rem 0.3rem;
+  }
+
+  .prose :global(hr) {
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .prose :global(blockquote) {
+    margin: 1.8rem 0;
+    padding: 0.4rem 0 0.4rem 1.2rem;
+    border-left: 3px solid var(--accent);
+    color: var(--text-muted);
+  }
+
+  .prose :global(img) {
+    margin: 2rem 0 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+  }
+
+  .prose :global(figcaption),
+  .prose :global(em) {
+    color: var(--text-muted);
+  }
+
+  .toc {
+    position: sticky;
+    top: 6rem;
+    border-left: 1px solid var(--border-color);
+    padding-left: 1rem;
+  }
+
+  .toc p {
+    margin: 0 0 0.75rem;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .toc nav {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .toc a {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .toc a[data-depth="3"] {
+    padding-left: 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 980px) {
+    .content-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .note-page {
+      padding-top: 2rem;
+    }
+
+    .note-shell {
+      width: min(100% - 28px, 1120px);
+    }
+  }
+</style>
