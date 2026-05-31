@@ -1,12 +1,9 @@
-.playwright-mcp/
-.playwright-cli/
-.claude/
 node_modules/
-_site/
-# Generated frontend bundle; source of truth is assets/js/app.jsx.
-assets/js/app.js
+dist/
+.astro/
+.env
+.env.*
+!.env.example
 .DS_Store
 Thumbs.db
 *.log
-nul
-output/

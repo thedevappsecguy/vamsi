@@ -1,0 +1,28 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  date?: Date | string;
+}
+
+const { title, description, image, date } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} date={date} />
+  </head>
+  <body>
+    <Header />
+    <div data-pagefind-body>
+      <slot />
+    </div>
+    <Footer />
+  </body>
+</html>

@@ -1,13 +1,25 @@
 {
   "name": "vamsi-portfolio",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "build": "babel assets/js/app.jsx --out-file assets/js/app.js",
-    "build:site": "babel assets/js/app.jsx --out-file _site/assets/js/app.js"
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist --output-path dist/pagefind --force-language en",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1",
+    "astro": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "@lucide/astro": "^1.17.0",
+    "astro": "^6.3.1",
+    "pagefind": "^1.5.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.27.1",
-    "@babel/core": "7.27.1",
-    "@babel/preset-react": "7.27.1"
+    "cross-env": "^10.1.0"
   }
 }

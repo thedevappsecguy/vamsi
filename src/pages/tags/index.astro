@@ -1,0 +1,74 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE_DESCRIPTION } from "../../consts";
+import { tagPath } from "../../utils/tags";
+
+const posts = await getCollection("notes");
+const counts = new Map<string, number>();
+
+for (const post of posts) {
+  for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) || 0) + 1);
+}
+
+const tags = [...counts.entries()]
+  .map(([tag, count]) => ({ tag, count }))
+  .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+---
+
+<BaseLayout title="Tags" description={SITE_DESCRIPTION}>
+  <main class="tags-page shell">
+    <header>
+      <p class="eyebrow">Index</p>
+      <h1 class="display-heading">Tags</h1>
+    </header>
+    <div class="tag-cloud">
+      {tags.map(({ tag, count }) => (
+        <a href={tagPath(tag)}>
+          <span>#{tag}</span>
+          <small>{count}</small>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .tags-page {
+    padding: 4rem 0 5rem;
+  }
+
+  .tags-page .display-heading {
+    margin: 0.45rem 0 2rem;
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .tag-cloud a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--surface);
+    padding: 0.7rem 0.95rem;
+    color: var(--text-primary);
+    font-weight: 800;
+  }
+
+  .tag-cloud small {
+    display: inline-grid;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    color: var(--accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+</style>

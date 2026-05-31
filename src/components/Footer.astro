@@ -1,0 +1,51 @@
+---
+import { socialLinks } from "../data/portfolio";
+---
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <p>&copy; 2026 Vamsi.</p>
+    <div class="footer-links" aria-label="Social links">
+      {socialLinks.map((link) => (
+        <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+      ))}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border-color);
+    background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 80px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .footer-inner p {
+    margin: 0;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 720px) {
+    .footer-inner {
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: center;
+      padding-block: 1rem;
+    }
+  }
+</style>

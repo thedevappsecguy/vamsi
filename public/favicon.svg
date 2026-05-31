@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+    <circle cx="64" cy="64" r="56" stroke="#F97316" stroke-width="3"/>
+    <circle cx="64" cy="64" r="32" fill="#F97316"/>
+    <circle cx="64" cy="64" r="16" fill="white"/>
+    <style>
+        circle:nth-child(2) { fill: #F97316; }
+        circle:nth-child(3) { fill: #FFFFFF; }
+        @media (prefers-color-scheme: dark) {
+            circle:nth-child(1) { stroke: #FB923C; }
+            circle:nth-child(2) { fill: #FB923C; }
+            circle:nth-child(3) { fill: #18181B; }
+        }
+    </style>
+</svg>

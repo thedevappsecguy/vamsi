@@ -1,0 +1,255 @@
+---
+import { withBase } from "../consts";
+
+const pagefindPath = withBase("pagefind/pagefind.js");
+const notesPrefix = withBase("notes/");
+---
+
+<site-search data-pagefind={pagefindPath} data-notes-prefix={notesPrefix}>
+  <button class="search-trigger" data-open-modal disabled type="button" aria-label="Search notes" title="Search notes">
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+      <path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <dialog aria-label="Search notes">
+    <form class="search-form" role="search">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+        <path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      <input class="search-input" type="search" placeholder="Search notes" autocomplete="off" spellcheck="false" />
+      <button class="search-close" type="button" aria-label="Close search" title="Close search">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </form>
+    <div class="search-status" aria-live="polite"></div>
+    <ul class="search-results"></ul>
+  </dialog>
+</site-search>
+
+<script>
+  class SiteSearch extends HTMLElement {
+    pagefindModule: any;
+    pagefindPromise: Promise<any> | null = null;
+
+    connectedCallback() {
+      const openButton = this.querySelector("[data-open-modal]") as HTMLButtonElement | null;
+      const dialog = this.querySelector("dialog") as HTMLDialogElement | null;
+      const input = this.querySelector(".search-input") as HTMLInputElement | null;
+      const closeButton = this.querySelector(".search-close") as HTMLButtonElement | null;
+      const results = this.querySelector(".search-results") as HTMLUListElement | null;
+      const status = this.querySelector(".search-status") as HTMLDivElement | null;
+
+      if (!openButton || !dialog || !input || !closeButton || !results || !status) return;
+
+      let searchTimer: ReturnType<typeof setTimeout> | null = null;
+      openButton.disabled = false;
+
+      const closeSearch = () => {
+        dialog.close();
+        document.body.toggleAttribute("data-search-modal-open", false);
+        input.value = "";
+        results.innerHTML = "";
+        status.textContent = "";
+      };
+
+      const openSearch = () => {
+        dialog.showModal();
+        document.body.toggleAttribute("data-search-modal-open", true);
+        input.focus();
+      };
+
+      const renderResults = (items: Array<{ url: string; title: string; excerpt: string }>) => {
+        if (!items.length) {
+          results.innerHTML = "";
+          status.textContent = input.value ? "No matching notes found." : "";
+          return;
+        }
+
+        status.textContent = `${items.length} result${items.length === 1 ? "" : "s"}`;
+        results.innerHTML = items
+          .map(
+            (item) => `
+              <li>
+                <a href="${item.url}">
+                  <strong>${item.title}</strong>
+                  ${item.excerpt ? `<span>${item.excerpt}</span>` : ""}
+                </a>
+              </li>
+            `,
+          )
+          .join("");
+      };
+
+      const loadPagefind = async () => {
+        if (this.pagefindModule) return this.pagefindModule;
+        if (!this.pagefindPromise) {
+          const pagefindUrl = this.dataset.pagefind || "/pagefind/pagefind.js";
+          this.pagefindPromise = import(/* @vite-ignore */ pagefindUrl).then((module) => module.default || module);
+        }
+        this.pagefindModule = await this.pagefindPromise;
+        return this.pagefindModule;
+      };
+
+      const stripHtml = (value: string) => value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+
+      const search = async () => {
+        const query = input.value.trim();
+        if (!query) {
+          renderResults([]);
+          return;
+        }
+
+        status.textContent = "Searching...";
+
+        try {
+          const pagefind = await loadPagefind();
+          const response = await pagefind.search(query);
+          const notesPrefix = this.dataset.notesPrefix || "/notes/";
+          const seen = new Set<string>();
+          const loaded = await Promise.all(
+            response.results.slice(0, 8).map(async (result: any) => {
+              const data = await result.data();
+              const url = String(data.url || "").replace(/\/index\.html$/, "/");
+              if (!url.includes(notesPrefix) || seen.has(url)) return null;
+              seen.add(url);
+              return {
+                url,
+                title: stripHtml(data.meta?.title || "Untitled"),
+                excerpt: stripHtml(data.excerpt || "").slice(0, 180),
+              };
+            }),
+          );
+          renderResults(loaded.filter(Boolean));
+        } catch {
+          results.innerHTML = "";
+          status.textContent = "Search is unavailable for this build.";
+        }
+      };
+
+      openButton.addEventListener("click", openSearch);
+      closeButton.addEventListener("click", closeSearch);
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) closeSearch();
+      });
+      document.addEventListener("keydown", (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          openSearch();
+        }
+        if (event.key === "Escape" && dialog.open) closeSearch();
+      });
+      input.addEventListener("input", () => {
+        if (searchTimer) clearTimeout(searchTimer);
+        searchTimer = setTimeout(search, 180);
+      });
+    }
+  }
+
+  customElements.define("site-search", SiteSearch);
+</script>
+
+<style>
+  site-search {
+    display: inline-flex;
+  }
+
+  .search-trigger,
+  .search-close {
+    display: inline-grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .search-trigger:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .search-trigger:hover,
+  .search-close:hover {
+    color: var(--accent-strong);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--border-color));
+  }
+
+  dialog {
+    width: min(42rem, calc(100vw - 2rem));
+    max-height: min(78vh, 42rem);
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(10px);
+  }
+
+  .search-form {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+  }
+
+  .search-input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  .search-status {
+    min-height: 2.6rem;
+    padding: 0.75rem 1rem 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .search-results {
+    display: grid;
+    gap: 0.5rem;
+    max-height: 28rem;
+    margin: 0;
+    padding: 0 0.75rem 0.9rem;
+    overflow: auto;
+    list-style: none;
+  }
+
+  .search-results a {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.85rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+  }
+
+  .search-results strong {
+    color: var(--text-primary);
+  }
+
+  .search-results span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+</style>
