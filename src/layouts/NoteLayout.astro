@@ -38,7 +38,7 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 });
 ---
 
-<BaseLayout title={title} description={summary || SITE_DESCRIPTION} image={featuredImage} date={pubDate}>
+<BaseLayout title={title} description={summary || SITE_DESCRIPTION} image={featuredImage} date={pubDate} type="article">
   <main class="note-page">
     <article class="note-shell">
       <a class="back-link" href={withBase("notes/")}>Back to notes</a>
