@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../consts";
+---
+
+<BaseLayout title="Page not found" description="The page you're looking for doesn't exist.">
+  <main class="not-found">
+    <div class="shell not-found-inner">
+      <p class="eyebrow">404</p>
+      <h1 class="display-heading">Page not found.</h1>
+      <p class="not-found-copy">
+        The page you're looking for doesn't exist or may have moved.
+      </p>
+      <div class="not-found-links">
+        <a class="text-link" href={withBase("")}>Back home</a>
+        <a class="text-link" href={withBase("notes/")}>Browse notes</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    place-items: center;
+    padding: 6rem 0;
+  }
+
+  .not-found-inner {
+    max-width: 520px;
+    text-align: center;
+  }
+
+  .not-found-inner .display-heading {
+    margin: 0.5rem 0 1rem;
+  }
+
+  .not-found-copy {
+    margin: 0 0 2rem;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .not-found-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+</style>
