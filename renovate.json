@@ -4,13 +4,14 @@
     "config:best-practices",
     "helpers:pinGitHubActionDigestsToSemver",
     "schedule:weekly",
+    ":enableVulnerabilityAlertsWithAdditionalLabel(security)",
     ":disableDependencyDashboard"
   ],
   "enabledManagers": [
     "github-actions",
     "npm"
   ],
-  "minimumReleaseAge": "7 days",
+  "osvVulnerabilityAlerts": false,
   "rangeStrategy": "pin",
   "packageRules": [
     {
@@ -18,6 +19,14 @@
       "matchManagers": [
         "github-actions"
       ]
+    },
+    {
+      "description": "Wait seven days before adopting new npm releases",
+      "matchManagers": [
+        "npm"
+      ],
+      "minimumReleaseAge": "7 days",
+      "internalChecksFilter": "strict"
     }
   ]
 }

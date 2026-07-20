@@ -53,7 +53,7 @@ const notesPrefix = withBase("notes/");
         dialog.close();
         document.body.toggleAttribute("data-search-modal-open", false);
         input.value = "";
-        results.innerHTML = "";
+        results.replaceChildren();
         status.textContent = "";
       };
 
@@ -64,25 +64,34 @@ const notesPrefix = withBase("notes/");
       };
 
       const renderResults = (items: Array<{ url: string; title: string; excerpt: string }>) => {
+        results.replaceChildren();
         if (!items.length) {
-          results.innerHTML = "";
           status.textContent = input.value ? "No matching notes found." : "";
           return;
         }
 
         status.textContent = `${items.length} result${items.length === 1 ? "" : "s"}`;
-        results.innerHTML = items
-          .map(
-            (item) => `
-              <li>
-                <a href="${item.url}">
-                  <strong>${item.title}</strong>
-                  ${item.excerpt ? `<span>${item.excerpt}</span>` : ""}
-                </a>
-              </li>
-            `,
-          )
-          .join("");
+        const fragment = document.createDocumentFragment();
+
+        for (const item of items) {
+          const listItem = document.createElement("li");
+          const link = document.createElement("a");
+          const title = document.createElement("strong");
+          link.href = item.url;
+          title.textContent = item.title;
+          link.append(title);
+
+          if (item.excerpt) {
+            const excerpt = document.createElement("span");
+            excerpt.textContent = item.excerpt;
+            link.append(excerpt);
+          }
+
+          listItem.append(link);
+          fragment.append(listItem);
+        }
+
+        results.append(fragment);
       };
 
       const loadPagefind = async () => {
@@ -110,13 +119,10 @@ const notesPrefix = withBase("notes/");
           const pagefind = await loadPagefind();
           const response = await pagefind.search(query);
           const notesPrefix = this.dataset.notesPrefix || "/notes/";
-          const seen = new Set<string>();
           const loaded = await Promise.all(
-            response.results.slice(0, 8).map(async (result: any) => {
+            response.results.map(async (result: any) => {
               const data = await result.data();
               const url = String(data.url || "").replace(/\/index\.html$/, "/");
-              if (!url.includes(notesPrefix) || seen.has(url)) return null;
-              seen.add(url);
               return {
                 url,
                 title: stripHtml(data.meta?.title || "Untitled"),
@@ -124,9 +130,15 @@ const notesPrefix = withBase("notes/");
               };
             }),
           );
-          renderResults(loaded.filter(Boolean));
+          const seen = new Set<string>();
+          const noteArticles = loaded.filter((item) => {
+            if (!item.url.startsWith(notesPrefix) || item.url === notesPrefix || seen.has(item.url)) return false;
+            seen.add(item.url);
+            return true;
+          });
+          renderResults(noteArticles.slice(0, 8));
         } catch {
-          results.innerHTML = "";
+          results.replaceChildren();
           status.textContent = "Search is unavailable for this build.";
         }
       };
@@ -194,9 +206,14 @@ const notesPrefix = withBase("notes/");
     overflow: hidden;
   }
 
+  dialog[open] {
+    animation: dialog-enter 180ms ease-out;
+  }
+
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.42);
     backdrop-filter: blur(10px);
+    animation: backdrop-enter 180ms ease-out;
   }
 
   .search-form {
@@ -234,22 +251,56 @@ const notesPrefix = withBase("notes/");
     list-style: none;
   }
 
-  .search-results a {
+  .search-results :global(a) {
     display: grid;
     gap: 0.25rem;
     padding: 0.85rem 0.9rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background: var(--bg-primary);
+    transition: border-color 160ms ease, transform 160ms ease;
   }
 
-  .search-results strong {
+  .search-results :global(a:hover) {
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--border-color));
+    transform: translateY(-1px);
+  }
+
+  .search-results :global(strong) {
     color: var(--text-primary);
   }
 
-  .search-results span {
+  .search-results :global(span) {
     color: var(--text-muted);
     font-size: 0.9rem;
     line-height: 1.55;
+  }
+
+  @keyframes dialog-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.985);
+    }
+  }
+
+  @keyframes backdrop-enter {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open],
+    dialog::backdrop {
+      animation: none;
+    }
+
+    .search-results :global(a) {
+      transition: none;
+    }
+
+    .search-results :global(a:hover) {
+      transform: none;
+    }
   }
 </style>

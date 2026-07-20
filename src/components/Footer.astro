@@ -1,10 +1,12 @@
 ---
 import { socialLinks } from "../data/portfolio";
+
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="shell footer-inner">
-    <p>&copy; 2026 Vamsi.</p>
+    <p>&copy; {currentYear} Vamsi.</p>
     <div class="footer-links" aria-label="Social links">
       {socialLinks.map((link) => (
         <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
