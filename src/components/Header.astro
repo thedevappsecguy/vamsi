@@ -25,7 +25,11 @@ function isActive(href: string) {
 
     <div class="nav-links">
       {navItems.map((item) => (
-        <a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>
+        <a
+          href={item.href}
+          class:list={["nav-link", { active: isActive(item.href) }]}
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
           {item.label}
         </a>
       ))}
@@ -33,7 +37,14 @@ function isActive(href: string) {
 
     <div class="nav-actions">
       <SearchModal />
-      <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle theme" title="Toggle theme">
+      <button
+        id="theme-toggle"
+        class="icon-button"
+        type="button"
+        aria-label="Dark theme"
+        aria-pressed="false"
+        title="Switch to dark theme"
+      >
         <svg class="sun-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -50,10 +61,26 @@ function isActive(href: string) {
   const themeToggle = document.getElementById("theme-toggle");
   const storageKey = "vamsi-theme";
 
+  function updateThemeState(nextTheme: "light" | "dark") {
+    const isDark = nextTheme === "dark";
+    const title = `Switch to ${isDark ? "light" : "dark"} theme`;
+    themeToggle?.setAttribute("aria-pressed", String(isDark));
+    themeToggle?.setAttribute("title", title);
+  }
+
   function applyTheme(nextTheme: "light" | "dark") {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion) {
+      document.documentElement.classList.add("theme-transitioning");
+      window.setTimeout(() => document.documentElement.classList.remove("theme-transitioning"), 240);
+    }
+
     document.documentElement.classList.toggle("dark", nextTheme === "dark");
     localStorage.setItem(storageKey, nextTheme);
+    updateThemeState(nextTheme);
   }
+
+  updateThemeState(document.documentElement.classList.contains("dark") ? "dark" : "light");
 
   themeToggle?.addEventListener("click", () => {
     const isDark = document.documentElement.classList.contains("dark");
@@ -154,32 +181,47 @@ function isActive(href: string) {
     cursor: pointer;
   }
 
+  .icon-button svg {
+    grid-area: 1 / 1;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
   .icon-button:hover {
     color: var(--accent-strong);
     border-color: color-mix(in srgb, var(--accent) 42%, var(--border-color));
   }
 
   .moon-icon {
-    display: none;
+    opacity: 0;
+    transform: rotate(-18deg) scale(0.75);
   }
 
   html.dark .sun-icon {
-    display: none;
+    opacity: 0;
+    transform: rotate(18deg) scale(0.75);
   }
 
   html.dark .moon-icon {
-    display: block;
+    opacity: 1;
+    transform: rotate(0) scale(1);
   }
 
   @media (max-width: 760px) {
     .site-nav {
       grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "brand actions"
+        "links links";
       gap: 0.75rem;
       padding-block: 0.75rem;
     }
 
+    .brand {
+      grid-area: brand;
+    }
+
     .nav-links {
-      grid-column: 1 / -1;
+      grid-area: links;
       justify-content: flex-start;
       gap: 1rem;
       overflow-x: auto;
@@ -188,6 +230,16 @@ function isActive(href: string) {
 
     .nav-links::-webkit-scrollbar {
       display: none;
+    }
+
+    .nav-actions {
+      grid-area: actions;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon-button svg {
+      transition: none;
     }
   }
 </style>

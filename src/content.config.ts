@@ -11,7 +11,7 @@ const notes = defineCollection({
     summary: z.string(),
     pubDate: z.coerce.date(),
     tags: z.array(z.string()).default([]),
-    topLink: z.string().url().optional(),
+    topLink: z.url().optional(),
     topLinkLabel: z.string().optional(),
     featuredImage: z.string().optional(),
   }),

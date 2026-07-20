@@ -10,7 +10,7 @@ import {
   SITE_TITLE,
   withBase,
 } from "../consts";
-import { focusAreas, profileIntro, profilePoints, projects, socialLinks } from "../data/portfolio";
+import { focusAreas, focusYear, profileIntro, profilePoints, projects, socialLinks } from "../data/portfolio";
 
 const notes = (await getCollection("notes")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -42,7 +42,7 @@ const profileIcons = {
       <aside class="signal-panel" aria-label="Current focus">
         <div class="panel-head">
           <span>Focus</span>
-          <span>2026</span>
+          <span>{focusYear}</span>
         </div>
         <ul>
           {focusAreas.map((area) => <li>{area}</li>)}
@@ -54,7 +54,7 @@ const profileIcons = {
       <div class="shell profile-grid">
         <div class="profile-intro">
           <p class="eyebrow">Profile</p>
-          <h2 class="section-title">Security work, built into delivery.</h2>
+          <h2 class="section-title">Product security that scales with engineering.</h2>
           <p>{profileIntro}</p>
         </div>
         <div class="profile-summary">
@@ -117,10 +117,11 @@ const profileIcons = {
         <div class="notes-intro">
           <p class="eyebrow">Notes</p>
           <h2 class="section-title">Recent notes</h2>
+          <a class="text-link notes-archive-link" href={withBase("notes/")}>View all notes</a>
         </div>
 
         <ol class="notes-list">
-          {notes.map((post) => (
+          {notes.slice(0, 3).map((post) => (
             <li>
               <a href={withBase(`notes/${post.id}/`)}>
                 <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
@@ -431,6 +432,23 @@ const profileIcons = {
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .notes-archive-link {
+    margin-top: 1rem;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .profile-link,
+    .project-card {
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .profile-link:hover,
+    .project-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
   }
 
   .notes-list li + li {

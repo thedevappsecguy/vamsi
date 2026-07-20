@@ -20,8 +20,9 @@ const { title, description, image, date, type } = Astro.props;
     <BaseHead title={title} description={description} image={image} date={date} type={type} />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <Header />
-    <div data-pagefind-body>
+    <div id="main-content" tabindex="-1">
       <slot />
     </div>
     <Footer />

@@ -1,3 +1,5 @@
+export const focusYear = new Date().getFullYear();
+
 export const focusAreas = [
   "Application Security",
   "AI/ML Security",
@@ -6,12 +8,12 @@ export const focusAreas = [
 ];
 
 export const profileIntro =
-  "Reducing product risk while keeping engineering teams moving.";
+  "Turning security requirements into practical product and platform capabilities.";
 
 export const profilePoints = [
-  "Partner with Engineering, Security, and Product teams to integrate security throughout the development process through secure design, security reviews, vulnerability triage, bug bounty signal, and release response work.",
-  "Build preventative controls, automation, paved roads, security tooling, and reusable guardrails for AI-enabled modern development workflows.",
-  "Build AI and agentic security capabilities across AI-powered product features and development tools, including secure by design AI features, prompt-injection defense, agent workflow guardrails, tool-use controls, AI input guardrails, threat detection, logging, and security observability.",
+  "Guide product security decisions across the lifecycle - from architecture and threat modeling to vulnerability response and release readiness.",
+  "Build scalable controls, paved roads, automation, and tooling that engineering teams can adopt by default.",
+  "Lead security for AI-powered features and agentic workflows across secure design, guardrails, tool-use controls, threat detection, logging, and security observability.",
 ];
 
 export const projects = [

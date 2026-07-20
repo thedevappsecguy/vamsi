@@ -60,6 +60,24 @@ body[data-search-modal-open] {
   overflow: hidden;
 }
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.55rem 0.8rem;
+  border: 2px solid var(--accent-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-weight: 700;
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -76,6 +94,15 @@ input {
 
 button {
   color: inherit;
+}
+
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 78%, white);
+  outline-offset: 3px;
+}
+
+#main-content:focus {
+  outline: none;
 }
 
 img {
@@ -149,6 +176,32 @@ main {
 
 .text-link:hover {
   color: var(--accent-warm);
+}
+
+html.theme-transitioning body,
+html.theme-transitioning .site-header,
+html.theme-transitioning .signal-panel,
+html.theme-transitioning .profile-band,
+html.theme-transitioning .notes-band,
+html.theme-transitioning .profile-link,
+html.theme-transitioning .project-card,
+html.theme-transitioning .site-footer {
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @media (max-width: 720px) {
