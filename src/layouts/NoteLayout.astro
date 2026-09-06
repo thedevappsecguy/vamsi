@@ -127,6 +127,7 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
   }
 
   .prose {
+    min-width: 0;
     color: var(--text-secondary);
     font-size: 1.04rem;
   }
@@ -201,6 +202,7 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
   }
 
   .prose :global(.table-wrap) {
+    max-width: 100%;
     margin: 2rem 0;
     overflow-x: auto;
     border: 1px solid var(--border-color);
