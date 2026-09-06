@@ -4,15 +4,22 @@
     "config:best-practices",
     "helpers:pinGitHubActionDigestsToSemver",
     "schedule:weekly",
-    ":enableVulnerabilityAlertsWithAdditionalLabel(security)",
-    ":disableDependencyDashboard"
+    ":enableVulnerabilityAlertsWithAdditionalLabel(security)"
   ],
   "enabledManagers": [
     "github-actions",
     "npm"
   ],
-  "osvVulnerabilityAlerts": false,
+  "osvVulnerabilityAlerts": true,
   "rangeStrategy": "pin",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "addLabels": [
+      "security"
+    ],
+    "prCreation": "immediate",
+    "vulnerabilityFixStrategy": "lowest"
+  },
   "packageRules": [
     {
       "groupName": "github-actions",
