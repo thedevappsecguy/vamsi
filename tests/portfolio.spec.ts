@@ -183,3 +183,23 @@ test("publishes the Kaggle agent-security postmortem with accessible evidence", 
     await expect(externalLink).toHaveAttribute("rel", /(?:^|\s)noreferrer(?:\s|$)/);
   }
 });
+
+test("contains the postmortem table within the mobile note layout", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("notes/kaggle-agent-security-postmortem/");
+
+  const layout = await page.evaluate(() => {
+    const wrapper = document.querySelector<HTMLElement>(".table-wrap");
+    const table = wrapper?.querySelector("table");
+
+    return {
+      viewportWidth: document.documentElement.clientWidth,
+      pageWidth: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+      wrapperWidth: wrapper?.clientWidth ?? 0,
+      tableWidth: table?.scrollWidth ?? 0,
+    };
+  });
+
+  expect(layout.pageWidth).toBeLessThanOrEqual(layout.viewportWidth);
+  expect(layout.tableWidth).toBeGreaterThan(layout.wrapperWidth);
+});
