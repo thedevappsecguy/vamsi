@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Public score milestones</title>
+  <desc id="desc">A line chart showing representative public score milestones rising from 2.700 at v8 to 93.465 at v170.</desc>
+  <rect width="960" height="420" fill="#ffffff"/>
+  <g font-family="Atkinson, Arial, sans-serif">
+    <text x="72" y="34" fill="#151515" font-size="24" font-weight="700">Public score milestones</text>
+    <text x="72" y="58" fill="#73786f" font-size="14">Replay validation and per model throughput moved the frontier.</text>
+    <g stroke="#dfe2d6" stroke-width="1">
+      <line x1="72" y1="324" x2="920" y2="324"/><line x1="72" y1="256" x2="920" y2="256"/>
+      <line x1="72" y1="188" x2="920" y2="188"/><line x1="72" y1="120" x2="920" y2="120"/>
+      <line x1="72" y1="52" x2="920" y2="52"/>
+    </g>
+    <g fill="#73786f" font-size="13" text-anchor="end">
+      <text x="62" y="328">0</text><text x="62" y="260">25</text><text x="62" y="192">50</text><text x="62" y="124">75</text><text x="62" y="56">100</text>
+    </g>
+    <path d="M92 316.66 L188 279.94 L284 198.05 L380 94.39 L476 84.59 L572 82.87 L668 80.32 L764 76.40 L860 69.78" fill="none" stroke="#0f7a4f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#ffffff" stroke="#0f7a4f" stroke-width="3">
+      <circle cx="92" cy="316.66" r="5"/><circle cx="188" cy="279.94" r="5"/><circle cx="284" cy="198.05" r="5"/>
+      <circle cx="380" cy="94.39" r="5"/><circle cx="476" cy="84.59" r="5"/><circle cx="572" cy="82.87" r="5"/>
+      <circle cx="668" cy="80.32" r="5"/><circle cx="764" cy="76.40" r="5"/><circle cx="860" cy="69.78" r="7" fill="#f97316" stroke="#f97316"/>
+    </g>
+    <g fill="#3d403d" font-size="13" text-anchor="middle">
+      <text x="92" y="352">v8</text><text x="188" y="352">v10</text><text x="284" y="352">v17</text>
+      <text x="380" y="352">v30</text><text x="476" y="352">v91</text><text x="572" y="352">v107</text>
+      <text x="668" y="352">v135</text><text x="764" y="352">v166</text><text x="860" y="352">v170</text>
+    </g>
+    <g fill="#0b5f41" font-size="13" font-weight="700" text-anchor="middle">
+      <text x="92" y="300">2.700</text><text x="188" y="264">16.200</text><text x="284" y="182">46.295</text>
+      <text x="380" y="78">88.020</text><text x="476" y="68">88.650</text><text x="668" y="64">89.590</text>
+      <text x="764" y="60">91.035</text>
+    </g>
+    <text x="860" y="48" fill="#c2410c" font-size="16" font-weight="700" text-anchor="middle">93.465</text>
+    <text x="920" y="390" fill="#73786f" font-size="12" text-anchor="end">Representative version milestones</text>
+  </g>
+</svg>

@@ -1,0 +1,399 @@
+---
+title: "How I reached rank #231 in OpenAI's AI agent security competition"
+description: "AI Agent Security: Multi-Step Tool Attacks, hosted by OpenAI, Google, and IEEE. From a 93.465 public score to a missed bronze medal after choosing the wrong final submissions."
+summary:
+  "A Kaggle competition postmortem about reaching public rank #231, missing a
+  projected private rank #227, and learning how replay throughput shaped agent
+  security evaluation."
+pubDate: 2026-09-06
+tags:
+  [
+    "Kaggle",
+    "Red Team",
+    "Agent Security",
+    "AI Security",
+    "LLM Security",
+    "Cybersecurity",
+    "Custom Metric",
+    "Attack Algorithm",
+    "AI Agents",
+    "Tool Security",
+    "OpenAI",
+    "Google",
+    "IEEE",
+  ]
+topLink: "https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks"
+topLinkLabel: "AI Agent Security Multi Step Tool Attacks"
+---
+
+## The competition
+
+[AI Agent Security Multi Step Tool Attacks](https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks)
+asked participants to develop attack algorithms that identify reproducible
+multistep failures in tool using AI agents.
+
+Source code: the
+[GitHub repository](https://github.com/thedevappsecguy/ai-agent-security-multi-step-tool-attacks)
+contains the slim v65 and v170 artifacts and local `uv` setup instructions.
+
+This competition ended with 12,230 registrations and 4,833 participants on 4,251
+teams. There were 73,774 submissions from 111 countries.
+
+Modern AI systems increasingly operate through tools. They can search the web,
+inspect files, write data, send emails, make HTTP requests, and run commands.
+That makes failures more consequential: an instruction hidden in content may
+influence a later tool call and cause an agent to leak data, modify files, misuse
+authority, or act without the user's intent.
+
+Most AI safety evaluations still focus on single prompts or isolated jailbreaks.
+Those tests are useful, but they do not fully capture the risks of tool using
+agents. Realistic failures often emerge across several steps and are hard to
+compare without a shared benchmark.
+
+The competition turned that problem into a deterministic offline benchmark.
+Participants submitted an `attack.py` search algorithm through the SDK. It
+explored a sandboxed tool using agent and returned replayable candidates. The
+evaluator replayed those candidates in a fresh environment, recomputed the
+trace, and scored the resulting security predicates.
+
+The benchmark focused on four unsafe action patterns:
+
+- **Exfiltration:** causing an agent to leak sensitive information through an
+  external channel.
+- **Untrusted to action:** causing content from an untrusted source to trigger a
+  dangerous action.
+- **Destructive write:** causing an agent to modify, overwrite, or delete
+  protected data.
+- **Confused deputy behavior:** causing an agent to misuse its authority on
+  behalf of an attacker or unintended context.
+
+Teams could use prompt search, fuzzing, heuristic search, evolutionary
+algorithms, state space exploration, trace guided mutation, novelty search, Go
+Explore style archive methods, or hybrid systems. The common requirement was to
+find high impact failures, produce diverse replayable paths, and use the
+evaluation budget efficiently. Because every submission ran against fixture
+backed tools in an offline sandbox, the benchmark was safe and reproducible.
+
+## The result I optimized for and the result I missed
+
+Over a month of submissions, I pushed my public score to **93.465**, which
+finished at public rank **#231**. It was the result of a long, careful
+progression: valid candidate generation, live validation, replay budget sizing,
+and finally separate throughput work for the two target models.
+
+<figure>
+  <img
+    src="/vamsi/notes/assets/kaggle-agent-security-public-leaderboard-93-465.png"
+    alt="Kaggle public leaderboard snapshot showing Vamsi Krishna Bonam at rank 244 with a score of 93.465."
+    width="1320"
+    height="1200"
+    loading="lazy"
+  />
+  <figcaption>
+    Public leaderboard snapshot captured during the competition. It shows rank
+    244 at 93.465. The later final public leaderboard download placed that score
+    at rank 231.
+  </figcaption>
+</figure>
+
+The uncomfortable lesson came from the released private results. An earlier,
+structurally different v65 strategy had an observed private score of **14.310**.
+That score would have landed at **#227** in the released 4,187 row private
+leaderboard: 226 teams were higher, and none tied it. That is top 5.42% of the
+released board. It is inside Kaggle's standard bronze band for competitions with
+more than 1,000 teams.
+[Kaggle's progression rules](https://www.kaggle.com/progression/competitions)
+describe that band as the top 10%.
+
+This is a counterfactual, not a claim that history can be rerun. The eligible
+alternative was the original v65 submission from before the deadline. Submission
+ref `56028258` later confirmed the same hosted script version (`341256615`) and
+the same private score. The point is simpler: the evidence for a distinct hedge
+already existed, and I treated final selection too much like a public score
+sorting problem.
+
+<figure>
+  <img
+    src="/vamsi/notes/assets/kaggle-agent-security-private-ranking.svg"
+    alt="Released private leaderboard scores with v65's observed 14.310 score marked at projected rank 227."
+    width="960"
+    height="480"
+    loading="lazy"
+  />
+  <figcaption>
+    Released private score ranking. The marker is counterfactual: v65 was not
+    the displayed final team entry, but its observed score would sit at rank
+    227. The silver and bronze lines are standard Kaggle rank bands, not award
+    guarantees.
+  </figcaption>
+</figure>
+
+## The 90 point diagnostic
+
+A public score near 90 was not simply a good score. It was a clue. The scoring
+structure and the two model evaluations suggested that one model was producing
+almost the full candidate portfolio while the other contributed little. The path
+beyond 90 therefore required model balance, not just more variants of the same
+strategy.
+
+That interpretation changed the direction of the final public experiments. I
+preserved the proven v135 path for GPT OSS and built a separate live only
+candidate flow for Gemma. v166 reached 91.035 and v170 reached 93.465. This was
+strong evidence about public model throughput, but it was not evidence that the
+same family would transfer to the private guardrail.
+
+## One month of experiments
+
+The work moved through five phases:
+
+- **Validity:** From July 25 to 26, I learned to produce the required artifact
+  and candidates that survived replay. The score moved from 2.700 to 16.200.
+- **Measurement:** From July 27 to 30, live validation and replay budget sizing
+  raised the best result from 46.295 to the v30 baseline at 88.020.
+- **Public optimization:** From August 2 to 24, calibration, reliability gates,
+  and bounded source action overlays produced v91 at 88.650, v107 at 89.100,
+  and v135 at 89.590.
+- **Model balance:** On August 30 and 31, preserving the proven GPT path and
+  improving the other model's live only flow produced v166 at 91.035 and v170
+  at 93.465.
+- **Selection:** I chose the two public leaders, even though v65 had already
+  shown evidence that a structurally different family transferred better to
+  private evaluation.
+
+The failed experiments were part of the journey too. Larger generated suffixes,
+broad prompt banks, email branches, multiple post candidates, source expansion,
+branch reordering, and shorter or Harmony heavy variants were interesting attack
+ideas, but they reduced replay reliability or consumed too much budget.
+
+<figure>
+  <img
+    src="/vamsi/notes/assets/kaggle-agent-security-score-timeline.svg"
+    alt="Public score milestones from the first valid submission through v170 at 93.465."
+    width="960"
+    height="420"
+    loading="lazy"
+  />
+  <figcaption>
+    Representative public score milestones. The gains came from replay validated
+    execution and throughput engineering, not from a single prompt rewrite.
+  </figcaption>
+</figure>
+
+## What moved public score, and what did not
+
+The public gains were consistent with a throughput story. Live validation
+prevented unproven candidates from consuming replay capacity. Conservative
+replay accounting kept the portfolio within budget. Deterministic ordering kept
+the strongest known candidates near the front. Once a reliable path existed,
+preserving it was more valuable than repeatedly rewriting it.
+
+This is a measured interpretation rather than a claim that every score increase
+had one cause. Some small changes were within normal evaluator variation. The
+clearer signal came from the large regressions and the eventual jump after
+separating the model paths.
+
+The failed experiments were equally useful. Static fill, broad prompt banks,
+generated candidates, multiple post portfolios, and broad source expansion all
+cost replay reliability or throughput. More complicated candidate families could
+be interesting from a security perspective while still being the wrong choice
+for this evaluator's budget.
+
+<div
+  class="table-wrap"
+  role="region"
+  aria-label="Representative competition results"
+  tabindex="0"
+>
+  <table aria-label="Representative competition results">
+    <thead>
+      <tr>
+        <th scope="col">Version</th>
+        <th scope="col">Experiment family</th>
+        <th scope="col">Public score</th>
+        <th scope="col">Private transfer evidence</th>
+        <th scope="col">Lesson</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>v30</td>
+        <td>Live calibrated single action baseline</td>
+        <td>88.020</td>
+        <td>None</td>
+        <td>Live validation established the reliable public baseline.</td>
+      </tr>
+      <tr>
+        <td>v91</td>
+        <td>Validated generated suffix refinement</td>
+        <td>88.650</td>
+        <td>None</td>
+        <td>Small, gated changes could help; larger generated fill did not.</td>
+      </tr>
+      <tr>
+        <td>v107</td>
+        <td>Post baseline source action overlay</td>
+        <td>89.100</td>
+        <td>None</td>
+        <td>Bounded additions were better than broad stacking.</td>
+      </tr>
+      <tr>
+        <td>v135</td>
+        <td>Two source overlay</td>
+        <td>89.590</td>
+        <td>None</td>
+        <td>Preserving ordering and limiting scope mattered.</td>
+      </tr>
+      <tr>
+        <td>v166</td>
+        <td>Archived GPT path plus live only second model flow</td>
+        <td>91.035</td>
+        <td>None</td>
+        <td>Per model throughput was a meaningful lever.</td>
+      </tr>
+      <tr>
+        <td>v170</td>
+        <td>Compact, full hop second model throughput</td>
+        <td>93.465</td>
+        <td>None</td>
+        <td>The strongest public result came from replay efficiency.</td>
+      </tr>
+      <tr>
+        <td>v64</td>
+        <td>Direct confused deputy family</td>
+        <td>56.025</td>
+        <td>10.545</td>
+        <td>Weak public performance could still carry private signal.</td>
+      </tr>
+      <tr>
+        <td>v65</td>
+        <td>Confused deputy throughput frontier</td>
+        <td>28.230</td>
+        <td>14.310</td>
+        <td>The strongest observed private transfer hedge.</td>
+      </tr>
+      <tr>
+        <td>v67 / v68</td>
+        <td>Related private transfer variants</td>
+        <td>44.905 / 40.290</td>
+        <td>4.785 / 12.495</td>
+        <td>Family level evidence mattered more than public ranking alone.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+_“None” means the row is included for its public progression rather than as
+private transfer evidence. The evidence below documents the final selection
+alongside the earlier v65 signal._
+
+---
+
+## Private transfer and final selection discipline
+
+I chose v170 and v166 because they were the two public leaders. I should have
+used one public leader and one structurally different hedge, such as v65. The
+v65 result did not reveal how the private guardrail worked, but it was enough
+evidence that the two mechanisms transferred differently under hidden
+evaluation.
+
+> I optimized the public leaderboard as if it were the objective. It was only
+> one observation about an unknown private evaluation. The mistake was not
+> choosing a weak strategy. It was choosing two strategies from the same public
+> family.
+
+<div class="selection-evidence">
+  <figure>
+    <img
+      src="/vamsi/notes/assets/kaggle-agent-security-final-selection-public.png"
+      alt="Kaggle final selection showing v170 and v166 selected for final evaluation."
+      width="1320"
+      height="800"
+      loading="eager"
+    />
+    <figcaption>
+      Final selection view. v170 and v166 were the two public score leaders
+      selected for final evaluation.
+    </figcaption>
+  </figure>
+  <figure>
+    <img
+      src="/vamsi/notes/assets/kaggle-agent-security-final-selection-private.png"
+      alt="Kaggle private score view showing v65 with an observed private score of 14.310."
+      width="1320"
+      height="800"
+      loading="eager"
+    />
+    <figcaption>
+      Earlier v65 evidence. Its observed private score of 14.310 came from a
+      distinct family that was not among the two selected entries.
+    </figcaption>
+  </figure>
+</div>
+
+## What I learned about tool using agents
+
+The first lesson is that the unit of evaluation is not a prompt. It is a
+replayable action trajectory. A candidate matters only when the model generates
+the intended tool behavior, the guardrail permits it, the trace satisfies a
+predicate, and the result survives fresh replay.
+
+The second lesson is that throughput is part of the security measurement. Faster
+generation can produce more candidates, but only reliable candidates create
+score. Shorter prompts, compact destinations, and live validation help only when
+they preserve the complete replay trace. Raw candidate count is not enough.
+
+The third lesson is that model behavior must be measured separately. GPT OSS and
+Gemma did not respond identically to the same candidate families. A strategy
+that looks saturated on one model may contribute almost nothing on the other.
+The two model hint was therefore not just about finding more attacks; it was
+about avoiding model imbalance.
+
+The fourth lesson is that public score is a proxy, not the objective. The public
+leaderboard rewarded the exfiltration throughput family, while the private
+results favored a structurally different confused deputy family. Final selection
+should therefore be treated as portfolio construction: one entry can maximize
+the visible metric, while another protects against a different guardrail or
+scoring regime.
+
+The research literature helped me interpret these results. AgentDojo and
+InjecAgent framed indirect prompt injection as a multi step tool use problem.
+CaMeL emphasized provenance and control flow rather than surface keyword
+filtering. Crescendo and newer adaptive adversary work reinforced the importance
+of gradual, stateful interaction. ASB and MCPTox broadened the picture to memory
+and tool poisoning, although those areas were largely outside this benchmark's
+fixed tool registry.
+
+## References
+
+These references shaped how I interpreted the experiments. They informed the
+questions I asked about indirect injection, adaptive interaction, provenance,
+and tool or memory poisoning, but I did not treat every research direction as
+directly applicable to this fixed benchmark.
+
+- [AgentDojo](https://arxiv.org/abs/2406.13352) and [InjecAgent](https://arxiv.org/abs/2403.02691) cover indirect prompt injection and tool use.
+- [CaMeL](https://arxiv.org/abs/2503.18813) focuses on provenance, control flow, and capability boundaries.
+- [Crescendo](https://arxiv.org/abs/2404.01833) studies gradual escalation across turns.
+- [ASB: Agent Security Bench](https://arxiv.org/abs/2410.02644) and [MCPTox](https://arxiv.org/abs/2508.14925) broaden the view to memory and tool poisoning.
+- The [OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html) connects those research themes to practical agent security risks.
+
+## Methodology and scope
+
+The numbers in this note come from the downloaded final public leaderboard,
+final private leaderboard, and submission history. The counterfactual rank is
+direct: the released private board had 226 scores greater than 14.310, no equal
+score, and rank 227 scored 14.280. On a 4,187 row board, the standard top 10%
+boundary is rank 418; the top 5% boundary is rank 209.
+
+The notebook and source artifacts were inspected for reproducibility, but no
+candidate prompts, payloads, or tool call syntax are reproduced inline in this
+note. All experiments used only the official competition SDK, fixture data, and
+hosted evaluator.
+
+The accompanying
+[reproducibility repository](https://github.com/thedevappsecguy/ai-agent-security-multi-step-tool-attacks)
+preserves the two slim source files and the evidence used for this postmortem.
+
+I did not leave the competition with the highest private score I could have
+achieved. I did leave with a better understanding of how agent security failures
+emerge through trajectories, model behavior, tool permissions, latency, and
+evaluation design. The benchmark rewarded me for learning how to move faster.

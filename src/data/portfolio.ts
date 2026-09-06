@@ -10,10 +10,29 @@ export const focusAreas = [
 export const profileIntro =
   "Turning security requirements into practical product and platform capabilities.";
 
-export const profilePoints = [
-  "Guide product security decisions across the lifecycle - from architecture and threat modeling to vulnerability response and release readiness.",
-  "Build scalable controls, paved roads, automation, and tooling that engineering teams can adopt by default.",
-  "Lead security for AI-powered features and agentic workflows across secure design, guardrails, tool-use controls, threat detection, logging, and security observability.",
+type ProfilePointSegment = {
+  text: string;
+  href?: string;
+};
+
+export const profilePoints: ProfilePointSegment[][] = [
+  [
+    {
+      text: "Guide product security decisions across the lifecycle - from architecture and threat modeling to vulnerability response and release readiness.",
+    },
+  ],
+  [
+    {
+      text: "Build scalable controls, paved roads, automation, and tooling that engineering teams can adopt by default.",
+    },
+  ],
+  [
+    { text: "Lead security for AI-powered features and " },
+    { text: "agentic workflows", href: "notes/kaggle-agent-security-postmortem/" },
+    {
+      text: " across secure design, guardrails, tool-use controls, threat detection, logging, and security observability.",
+    },
+  ],
 ];
 
 export const projects = [
