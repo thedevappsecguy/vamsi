@@ -31,22 +31,22 @@ const notesPrefix = withBase("notes/");
   </dialog>
 </site-search>
 
-<script>
+<script is:inline>
   class SiteSearch extends HTMLElement {
-    pagefindModule: any;
-    pagefindPromise: Promise<any> | null = null;
+    pagefindModule;
+    pagefindPromise = null;
 
     connectedCallback() {
-      const openButton = this.querySelector("[data-open-modal]") as HTMLButtonElement | null;
-      const dialog = this.querySelector("dialog") as HTMLDialogElement | null;
-      const input = this.querySelector(".search-input") as HTMLInputElement | null;
-      const closeButton = this.querySelector(".search-close") as HTMLButtonElement | null;
-      const results = this.querySelector(".search-results") as HTMLUListElement | null;
-      const status = this.querySelector(".search-status") as HTMLDivElement | null;
+      const openButton = this.querySelector("[data-open-modal]");
+      const dialog = this.querySelector("dialog");
+      const input = this.querySelector(".search-input");
+      const closeButton = this.querySelector(".search-close");
+      const results = this.querySelector(".search-results");
+      const status = this.querySelector(".search-status");
 
       if (!openButton || !dialog || !input || !closeButton || !results || !status) return;
 
-      let searchTimer: ReturnType<typeof setTimeout> | null = null;
+      let searchTimer = null;
       openButton.disabled = false;
 
       const closeSearch = () => {
@@ -63,7 +63,7 @@ const notesPrefix = withBase("notes/");
         input.focus();
       };
 
-      const renderResults = (items: Array<{ url: string; title: string; excerpt: string }>) => {
+      const renderResults = (items) => {
         results.replaceChildren();
         if (!items.length) {
           status.textContent = input.value ? "No matching notes found." : "";
@@ -100,11 +100,11 @@ const notesPrefix = withBase("notes/");
           const pagefindUrl = this.dataset.pagefind || "/pagefind/pagefind.js";
           this.pagefindPromise = import(/* @vite-ignore */ pagefindUrl).then((module) => module.default || module);
         }
-        this.pagefindModule = await this.pagefindPromise;
+        this.pagefindModule = await Promise.resolve(this.pagefindPromise);
         return this.pagefindModule;
       };
 
-      const stripHtml = (value: string) => value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+      const stripHtml = (value) => value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 
       const search = async () => {
         const query = input.value.trim();
@@ -120,7 +120,7 @@ const notesPrefix = withBase("notes/");
           const response = await pagefind.search(query);
           const notesPrefix = this.dataset.notesPrefix || "/notes/";
           const loaded = await Promise.all(
-            response.results.map(async (result: any) => {
+            response.results.map(async (result) => {
               const data = await result.data();
               const url = String(data.url || "").replace(/\/index\.html$/, "/");
               return {
@@ -130,7 +130,7 @@ const notesPrefix = withBase("notes/");
               };
             }),
           );
-          const seen = new Set<string>();
+          const seen = new Set();
           const noteArticles = loaded.filter((item) => {
             if (!item.url.startsWith(notesPrefix) || item.url === notesPrefix || seen.has(item.url)) return false;
             seen.add(item.url);
