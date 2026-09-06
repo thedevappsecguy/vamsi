@@ -59,7 +59,17 @@ const profileIcons = {
         </div>
         <div class="profile-summary">
           <ul>
-            {profilePoints.map((item) => <li>{item}</li>)}
+            {profilePoints.map((segments) => (
+              <li>
+                {segments.map((segment) =>
+                  segment.href ? (
+                    <a href={withBase(segment.href)}>{segment.text}</a>
+                  ) : (
+                    segment.text
+                  ),
+                )}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -286,6 +296,17 @@ const profileIcons = {
 
   .profile-summary li {
     color: var(--text-secondary);
+  }
+
+  .profile-summary a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 58%, transparent);
+    text-underline-offset: 0.16em;
+  }
+
+  .profile-summary a:hover {
+    color: var(--accent-strong);
   }
 
   .profile-summary li::before {
