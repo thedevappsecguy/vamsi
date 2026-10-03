@@ -2,7 +2,7 @@
   "name": "vamsi-portfolio",
   "private": true,
   "type": "module",
-  "packageManager": "npm@11.20.0",
+  "packageManager": "npm@12.1.0",
   "engines": {
     "node": "^24.11.0",
     "npm": ">=11"
