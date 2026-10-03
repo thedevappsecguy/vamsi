@@ -34,7 +34,7 @@
     "typescript": "6.0.3"
   },
   "overrides": {
-    "esbuild": "0.28.1",
+    "esbuild": "0.28.2",
     "js-yaml": "4.3.2",
     "vite": "8.0.16"
   }
