@@ -2,7 +2,7 @@
   "name": "vamsi-portfolio",
   "private": true,
   "type": "module",
-  "packageManager": "npm@12.1.0",
+  "packageManager": "npm@12.2.0",
   "engines": {
     "node": "v24.21.0",
     "npm": "12.2.0"
@@ -31,7 +31,7 @@
     "@playwright/test": "1.63.0",
     "cross-env": "10.1.0",
     "rehype-external-links": "3.0.0",
-    "typescript": "7.0.2"
+    "typescript": "6.0.3"
   },
   "overrides": {
     "esbuild": "0.28.2",
