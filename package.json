@@ -2,10 +2,10 @@
   "name": "vamsi-portfolio",
   "private": true,
   "type": "module",
-  "packageManager": "npm@12.2.0",
+  "packageManager": "npm@12.2.1",
   "engines": {
     "node": "v24.21.0",
-    "npm": "12.2.0"
+    "npm": "12.2.1"
   },
   "scripts": {
     "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1",
